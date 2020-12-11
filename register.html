@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Toru | register </title>
+
+    <link rel="apple-touch-icon" sizes="57x57" href="./assets/img/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="./assets/img/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="./assets/img/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="./assets/img/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="./assets/img/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./assets/img/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="./assets/img/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./assets/img/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/img/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./assets/img/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="./assets/img/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="./assets/css/font.css">
+</head>
+<body>
+    <div class="content" id="register"></div>
+    <nav class="nav">
+        <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo">
+        <a class="navLink" href="./index.html"> Entrar </a>
+    </nav>
+    <header class="header">
+        <h2 class="bienvenide" id="bien_r">Bienvenid@</h2>
+        <p class="parrafo" id="parrafo_r"> ingrensa y descubre todos los productos que puedes imaginar</p>
+    </header>    
+    <form action="#" method="POST" class="loginForm" id="form_r">
+        <fieldset class="fieldset" id="fieldset_r">
+                <label for="nombre_completo"> Nombre completo: </label>
+            <div class="inputContainer">
+                <input type="text" name="nombre_completo" class="inputs" id="nombreCompleto">
+            </div>
+                <label for="username_r"> Nombre de usuario: <span class="color-red">*</span> </label>
+            <div class="inputContainer">
+                <input type="text" name="username_r" class="inputs" id="username_r">
+            </div>
+                <label for="pass_r"> Contraseña: <span class="color-red">*</span> </label>
+            <div class="inputContainer">
+                <span class="icon-eye" id="ojete" onclick="mostrarContrasenia(this)"></span>
+                <input type="password" name="pass_r" class="inputs pass" id="pass">
+            </div>
+                <label for="pass_r_confirmar"> Confirmar contraseña: <span class="color-red">*</span> </label>
+            <div class="inputContainer">
+                <span class="icon-eye" onclick="mostrarContrasenia(this)"></span>
+                <input type="password" name="pass_r_confirmar" class="inputs pass" id="pass_confirmar">
+            </div>
+            <p class="color-red warning opacity_0" id="error"></p>
+        </fieldset>
+        <input type="submit" value="¡Estoy listo!" id="registro__">
+    </form>
+    <p class="decoracion" id="decoracion_r"> Si ya tienes cuenta, ingresa con el siguiente <a class="vinculo" id="vinculo_r" href="./register.html"> enlace </a>.</p>
+    <footer class="footer footerSesion">
+    <i> toru 2020 </i>
+    <div id="footerRedes">
+        <span class="icon-facebook"></span>
+        <span class="icon-pinterest"></span>
+        <span class="icon-instagram"></span>
+        <span class="icon-twitter"></span>
+    </div>
+</footer>
+
+<script src="./assets/js/main.js"></script>
+<script src="./assets/js/AccountMannager.js"></script>
+</body>
+</html>

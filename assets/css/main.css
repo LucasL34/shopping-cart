@@ -29,7 +29,7 @@ div.content{
     background-size: cover;
     filter: blur(4px);
 }
-div#index{
+div#login{
     background-image: url("../img/background-login.png");
 }
 nav.nav{
@@ -304,6 +304,8 @@ div#productos{
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-auto-rows: 325px;
     gap: 2em;
+    justify-items: center;
+    align-content: center;
 }
 div#designers{
     width: 100%;

@@ -1,14 +1,9 @@
 <?php
 header('Content-type: application/json');
+require_once("./database.php");
 
 $resultado = null;
 $parametros = null;
-
-$mysqli = new mysqli("localhost", "root", "", "tofuDB");
-
-if($mysqli->connect_errno){
-    echo "Fallo".$mysqli->connect_error;
-}
 
 if($_SERVER['REQUEST_METHOD'] == "GET") {
     $data = [];
@@ -80,13 +75,6 @@ if($_SERVER['REQUEST_METHOD'] == "PUT"){
         $parametros = json_decode($requestDataJSON, TRUE);
     }else{
         $parametros = $_POST;
-    }
-
-    $mysqli = new mysqli("localhost", "root", "", "tofudb");
-    $mysqli->set_charset("utf8");
-
-    if($mysqli->connect_errno){
-        echo "Fallo".$mysqli->connect_error;
     }
 
     // prod_id prod_nombre prod_precio prod_image prod_review prod_descr prod_cant prod_empresa

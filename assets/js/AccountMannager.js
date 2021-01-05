@@ -1,7 +1,7 @@
 
-let $fileNameAccount = document.URL.split("/");
+//let $fileNameAccount = document.URL.split("/");
 
-const archivoFocusAccount = $fileName[$fileName.length - 1];
+//const archivoFocusAccount = $fileName[$fileName.length - 1];
 const $form = document.querySelector(".loginForm");
 var carrito = "0";
 
@@ -9,7 +9,7 @@ window.onload = function(){
     error();
 }
 
-if (archivoFocusAccount == "index.html" || archivoFocusAccount == "index.php" ){
+if ( document.querySelector("#login") ){
 
     $form.onsubmit = event => {
         event.preventDefault();
@@ -17,7 +17,7 @@ if (archivoFocusAccount == "index.html" || archivoFocusAccount == "index.php" ){
     }
 
 }
-if (archivoFocusAccount == "register.html" || archivoFocusAccount == "register.php") {
+if( document.querySelector("#register") ){
     $form.onsubmit = event => {
         event.preventDefault();
         getBaseDatos(true);
@@ -33,7 +33,7 @@ function validarIndex(usuarios){
         if( username == usuarios[i].user_username && pass == usuarios[i].user_pass ){
             registro_u = true;
             localStorage.setItem("user_id" , usuarios[i].user_id);
-            location.href = "./shop.html";
+            location.href = "./index.html";
         }
     }
 
@@ -74,18 +74,18 @@ function validarRegistro(usuarios){
                 body: JSON.stringify(data),
                 headers: { 'Content-Type': 'application/json' }
             })
-                .then(response => {
-                    return response.json();
-                })
-                .then(data => {
-                    document.querySelector("#registro__").value = "Registrado";
-                    location.href="./index.html";
-                })
-                .catch(err => {
-                    document.querySelector("#registro__").value = "Reintentar";
-                    error(99);
-                    console.error(err);
-                })
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                document.querySelector("#registro__").value = "Registrado";
+                location.href="./login.html";
+            })
+            .catch(err => {
+                document.querySelector("#registro__").value = "Reintentar";
+                error(99);
+                console.error(err);
+            })
         }
 
     }else{

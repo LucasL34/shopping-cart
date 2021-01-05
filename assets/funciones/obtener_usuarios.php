@@ -1,23 +1,14 @@
 <?php
-session_start();
 header('Content-Type: application/json');
-
+require_once("./database.php");
 
 $resultado = null;
 $parametros = null;
 
 
-
 if($_SERVER['REQUEST_METHOD'] == "GET") {
     $data = [];
     $parametros = $_GET;
-
-    $mysqli = new mysqli("localhost", "root", "", "tofudb");
-    $mysqli->set_charset("utf8");
-
-    if($mysqli->connect_errno){
-        echo "Fallo: ".$mysqli->connect_error;
-    }
 
     $sql = "SELECT * FROM usuario ORDER BY user_id ASC";
     $resultado = $mysqli->query($sql);
@@ -43,13 +34,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         $parametros = json_decode($requestDataJSON, TRUE);
     }else{
         $parametros = $_POST;
-    }
-
-    $mysqli = new mysqli("localhost", "root", "", "tofudb");
-    $mysqli->set_charset("utf8");
-
-    if($mysqli->connect_errno){
-        echo "Fallo".$mysqli->connect_error;
     }
 
     // user_nombre	user_username	user_pass	prods_carrito
@@ -94,13 +78,6 @@ if($_SERVER['REQUEST_METHOD'] == "PUT"){
         $parametros = json_decode($requestDataJSON, TRUE);
     }else{
         $parametros = $_POST;
-    }
-
-    $mysqli = new mysqli("localhost", "root", "", "tofudb");
-    $mysqli->set_charset("utf8");
-
-    if($mysqli->connect_errno){
-        echo "Fallo".$mysqli->connect_error;
     }
 
     // user_nombre	user_username	user_pass	prods_carrito

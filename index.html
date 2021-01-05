@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Toru | Login </title>
+    <title> Cargando... </title>
 
     <link rel="apple-touch-icon" sizes="57x57" href="./assets/img/favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="./assets/img/favicon/apple-icon-60x60.png">
@@ -14,7 +14,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="./assets/img/favicon/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="./assets/img/favicon/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/img/favicon/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="./assets/img/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./assets/img/favicon/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./assets/img/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="./assets/img/favicon/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="./assets/img/favicon/favicon-16x16.png">
@@ -22,52 +22,119 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-
+    
     <link rel="stylesheet" href="./assets/css/main.css">
     <link rel="stylesheet" href="./assets/css/font.css">
 </head>
 <body>
-    <div class="content" id="index"></div>
-        <nav class="nav">
-            <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo">
-            <a class="navLink" href="./register.html"> Unirse </a>
-        </nav>
-        <header class="header">
-            <h2 class="bienvenide" id="bien_i">Bienvenid@</h2>
-            <p class="parrafo" id="parrafo_i"> compra todo lo que necesites para tu casa, departamento u oficina.</p>
-        </header>
-        <form action="#" method="POST" class="loginForm">
-            <fieldset class="fieldset">
-                <label for="username"> USERNAME: <span class="color-red">*</span></label>
-
-                <div class="inputContainer">
-                    <input type="text" name="username" id="username" class="inputs" required autocomplete="off">
-                </div>
-            
-                <label for="password">PASSWORD: <span class="color-red">*</span> </label>
-
-                <div class="inputContainer">
-                    <span class="icon-key2" onclick="olvido()"></span>
-                    <span class="icon-eye" onclick="mostrarContrasenia(this)"></span>
-                    <input type="password" name="pass" class="inputs pass" id="pass" required autocomplete="off">
-                </div>
-                <p class="color-red warning opacity_0" id="error"></p>
-            </fieldset>
-            
-            <input type="submit" value="Ingresar uwu">            
-        </form>
-        <p class="decoracion"> Si no tienes cuenta, registrate haciendo <a class="vinculo" href="./register.html"> click aquí </a>.</p>
+    <a name="top"></a>
     
-    <footer class="footer footerSesion">
-        <i> toru 2020 </i>
-        <div id="footerRedes">
-            <span class="icon-facebook"></span>
-            <span class="icon-pinterest"></span>
-            <span class="icon-instagram"></span>
-            <span class="icon-twitter"></span>
+    <nav class="nav">
+        <a href="#top" id="logoVinculo">
+            <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo" id="logoShop">
+        </a>
+        <div id="control"></div>
+    </nav>
+
+    <div id="filtrarDiv">
+        <form action="./filtrar.php" method="POST" id="form_s">
+            <select id="calificacion" class="select" name="review_f">
+                <option value="99" disabled selected hidden> Calificación </option>
+                <option value="0"> Muy bueno </option>
+                <option value="1"> Bueno </option>
+                <option value="2"> Regular </option>
+                <option value="3"> Malo </option>
+                <option value="4"> Muy malo </option>
+            </select>
+
+            <select id="precio" class="select" name="precio_f">
+                <option value="999999" disabled selected hidden> Precio </option>
+                <option value="2000"> Menos de $2.000 </option>
+                    <option value="5500"> Menos de $5.500 </option>
+                    <option value="10000"> Menos de $10.000 </option>
+                    <option value="100000"> Menos de $100.000 </option>
+            </select>
+
+            <input type="submit" name="filtrar" value="Filtrar" id="filtrarButton">
+        </form>
+    </div>
+    
+    <div id="carritoUI" class="display-none">
+        <h2> Carrito </h2>
+        <hr>
+        <div id="carritoUI_section">
+            <span></span>
+            <span></span>
+        </div>
+        <hr>
+        <div id="mostrarTotal">
+            <input type="submit" id="comprar_todo" value="Comprar todo" onclick="comprarTodo_()">
+            <span id="precioTotal"></span>
+        </div>
+    </div>
+
+    <section class="content" id="index">
+        <div id="muniecos">
+            <h2> Videogames MERCH </h2>
+            <hr class="separador">
+            <div id="muniecos_prod"></div>
+        </div>
+
+        <a name="ofertas"></a>
+        <div id="ofertas">
+            <h2> CORTE EMPRESAURIO </h2>
+            <hr class="separador">
+            <div id="ofertas_prod"></div>
+        </div>
+        <a name="productos"></a>
+        <div id="productos"> </div>
+
+        <div id="designers">
+            <h2> Top Designers </h2>
+            <hr class="separador">
+            <div id="designers_prod"></div>
+        </div>
+    </section>
+
+    <footer class="footer" id="footerShop">
+        <div class="footerSection" id="nosotros">
+            <a href="#top"> Toru Store</a>
+            <hr class="separador">
+            <img src="./assets/img/store.svg" alt="Logo Toru" id="footerLogo">
+        </div>
+
+        <div class="footerSection" id="inicio">
+            <h4> Inicio </h4>
+            <hr class="separador">
+            <a href="#top"> Videojuegos MERCH </a>
+            <a href="#ofertas"> Empresarios </a>
+            <a href="#productos"> Productos </a>
+        </div>
+
+        <div class="footerSection" id="contacto">
+            <h4> Contactos</h4>
+            <hr class="separador">
+            <span> (+54) 911 9999 9999 </span>
+            <span> contacto@toru.com.ar </span>
+            <span> Estatista Alberdi 98 piso 3 </span>
+        </div>
+        
+        <div class="creditos">
+            <i> toru 2020 </i>
+        </div>
+        <div class="creditos">
+            <i> Términos y condiciones </i>
+        </div>
+        <div class="creditos">
+            <div id="footerRedes">
+                <span class="icon-facebook"></span>
+                <span class="icon-pinterest"></span>
+                <span class="icon-instagram"></span>
+                <span class="icon-twitter"></span>
+            </div>
         </div>
     </footer>
+
     <script src="./assets/js/main.js"></script>
-    <script src="./assets/js/AccountMannager.js"></script>
 </body>
 </html>

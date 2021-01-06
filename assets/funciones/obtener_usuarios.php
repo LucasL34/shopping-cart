@@ -5,27 +5,52 @@ require_once("./database.php");
 $resultado = null;
 $parametros = null;
 
+function fetchDB( $cadena, $mysqli){ 
+
+    $arr = []; // save data & return
+
+    if($resultado = $mysqli->query($cadena)){
+
+        if($resultado->num_rows > 0){
+            while ($fila = $resultado->fetch_assoc()) {
+                $arr[] = $fila;
+            }
+
+            $respuesta = [ "status"=> 200, "response"=>$arr ];
+        }
+        else{
+            $respuesta = [ "status"=> 200, "response"=> [] ];
+        }
+    }else{
+        $respuesta = [ "status"=> 404, "response"=> "error" ];
+    }
+
+    return $respuesta;
+
+}
 
 if($_SERVER['REQUEST_METHOD'] == "GET") {
-    $data = [];
     $parametros = $_GET;
+    // filtrar por username, id 
 
-    $sql = "SELECT * FROM usuario ORDER BY user_id ASC";
-    $resultado = $mysqli->query($sql);
-
-    if($resultado->num_rows > 0){
-        while($fila = $resultado->fetch_assoc()){
-            $data[] = $fila;
+    if( isset($_GET['q']) && $_GET['q'] == true ) {
+        if( isset($_GET['user_f']) && $_GET['user_f'] == 'id'){ // filter by id
+            $sql = "SELECT * FROM usuario WHERE user_id=".$_GET['id'];
+            
+            echo json_encode( fetchDB($sql, $mysqli) );
         }
 
-        $respuesta = [ "status"=> 200, "response"=>$data];
+        if( isset($_GET['user_f']) &&  $_GET['user_f'] == 'name' ){
+            $name = $_GET['name'];
+            $sql = "SELECT * FROM usuario WHERE user_username='$name'";
+            
+            echo json_encode( fetchDB($sql, $mysqli) );
+        }
 
-        echo json_encode($respuesta);
     }else{
-        $respuesta = [ "status"=> 200, "response"=> [] ];
-
-        echo json_encode($respuesta);
+        echo "Filter error";
     }
+
 }
 
 if($_SERVER['REQUEST_METHOD'] == "POST"){

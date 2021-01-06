@@ -1,14 +1,15 @@
 
-var $fileName = document.URL.split("/");
+//var $fileName = document.URL.split("/");
 
-var arr = $fileName[$fileName.length - 1];
-var newFocus = arr.split("#");
+//var arr = $fileName[$fileName.length - 1];
+//var newFocus = arr.split("#");
 var monto = 0;
 
 var api_prod = "./assets/funciones/obtener_productos.php";
 var api_user = "./assets/funciones/obtener_usuarios.php";
 
-if ( newFocus[0] == "shop.php" || newFocus[0] == "shop.html" ){
+//newFocus[0] == "index.php" || newFocus[0] == "index.html"
+if ( document.querySelector("#index") ){
 
     window.onload = function() {
         obtenerPublicacion();
@@ -19,9 +20,10 @@ if ( newFocus[0] == "shop.php" || newFocus[0] == "shop.html" ){
 
 }
 
-var prodURL = newFocus[0].split("?");
+//var prodURL = newFocus[0].split("?");
 
-if( prodURL[0] == "producto.php" || prodURL[0] == "producto.html" ){
+//prodURL[0] == "producto.php" || prodURL[0] == "producto.html"
+if( document.querySelector("#producto_main") ){
 
     window.onload = function () {
         cargarUsuario();
@@ -29,11 +31,12 @@ if( prodURL[0] == "producto.php" || prodURL[0] == "producto.html" ){
         cargarProducto();
     }
     if( prodURL[1] == undefined ){
-        location.href = "./shop.html";
+        location.href = "./index.html";
     }
 }
 
-if( prodURL[0] == "filtrar.php" || prodURL[0] == "filtrar.html" ){
+//prodURL[0] == "filtrar.php" || prodURL[0] == "filtrar.html"
+if( document.querySelector("#filtrar_main") ){
     window.onload = function(){
         cargarUsuario();
         verificarCarrito();
@@ -90,8 +93,8 @@ function cargarUsuario(){
     $nav.innerHTML = "";
 
     if (id == undefined || id == null ){
-        usuario += `<a class="navLink" href="./register.html"> Registrarse </a>`;
-        usuario += `<a class="navLink" href="./index.html"> Iniciar sesión </a>`;
+        usuario += `<a class="navLink" href="./register.html"> Registrarse </a>
+            <a class="navLink" href="./login.html"> Iniciar sesión </a>`;
     }else{
         usuario += `
             <div id="perfil">
@@ -470,6 +473,15 @@ function verificarCarrito(){
     .catch(err=>{
         console.error(err);
     })
+
+    if(!localStorage.getItem("user_id") && document.querySelector("#producto_main") ){
+        let $carrito__ = document.querySelector("#prod_add_carrito");
+        $carrito__.classList.add("disabled");
+        $carrito__.setAttribute("disabled", true);
+        let $comprar__ = document.querySelector("#prod_comprar");
+        $comprar__.setAttribute("disabled", true);
+        $comprar__.classList.add("disabled")
+    }
 }
 
 function bloquearBoton(usuario_prod_id){
@@ -516,7 +528,7 @@ $form_filtrar.onsubmit = function(e){
 
     localStorage.setItem("form_f", JSON.stringify(form_f));
     
-    location.href = "./filtrar.php";
+    location.href = "./filtrar.html";
     
 }
 
@@ -525,27 +537,47 @@ function cargarFiltro(){
     var form = JSON.parse(localStorage.getItem("form_f"));
 
     fetch( api_prod, { method: "GET" } )
-        .then(response => {
-            return response.json();
-        })
-        .then(data => {
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
 
-            var $productos = document.querySelector("#productos");
+        var $productos = document.querySelector("#productos");
 
-            for (let i in data.response) {
-                if( Number(data.response[i].prod_precio) < Number(form.precio) ) {
-                    if (form.review == "99" ){
-                        crearPublicacion( publicacionFactory(data.response[i]), $productos );
-                    }
-                    if (form.review == data.response[i].prod_review ) {
-                        crearPublicacion(publicacionFactory(data.response[i]), $productos );
-                    }
+        for (let i in data.response) {
+            if( Number(data.response[i].prod_precio) < Number(form.precio) ) {
+                if (form.review == "99" ){
+                    crearPublicacion( publicacionFactory(data.response[i]), $productos );
+                }
+                if (form.review == data.response[i].prod_review ) {
+                    crearPublicacion(publicacionFactory(data.response[i]), $productos );
                 }
             }
-        })
-        .catch(err => {
-            console.error(err);
-        })
+        }
+    })
+    .catch(err => {
+        console.error(err);
+    })
+
+    let $review = document.querySelector("#calificacion");
+    var review__ = "";
+    if(form.review == "99"){
+        review__ = "Sin filtro";
+    }else{
+        review__ = categoria(form.review);
+    }
+    
+    $review.children[0].outerHTML = `<option value="${form.review}" disabled selected hidden> ${review__} </option>`;
+    
+    let $precio = document.querySelector("#precio");
+    var precio__ = "";
+    if(form.precio == "999999"){
+            precio__ = "Sin filtro";
+        }else{
+            precio__ = "$"+form.precio;
+        }
+    $precio.children[0].outerHTML = `<option value="${form.precio}" disabled selected hidden> ${precio__} </option>`;
+
 }
 
 /* Funciones basicas */ 

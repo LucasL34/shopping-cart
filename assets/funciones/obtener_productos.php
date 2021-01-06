@@ -1,78 +1,71 @@
 <?php
 header('Content-type: application/json');
+require("./database.php");
 
 $resultado = null;
 $parametros = null;
 
-$mysqli = new mysqli("localhost", "root", "", "tofuDB");
+function fetchDB( $cadena, $mysqli){ 
 
-if($mysqli->connect_errno){
-    echo "Fallo".$mysqli->connect_error;
+    $arr = []; // save data & return
+
+    if($resultado = $mysqli->query($cadena)){
+
+        if($resultado->num_rows > 0){
+            while ($fila = $resultado->fetch_assoc()) {
+                $arr[] = $fila;
+            }
+
+            $respuesta = [ "status"=> 200, "response"=>$arr ];
+        }
+        else{
+            $respuesta = [ "status"=> 200, "response"=> [] ];
+        }
+    }else{
+        $respuesta = [ "status"=> 404, "response"=> "error" ];
+    }
+
+    return $respuesta;
+
 }
 
 if($_SERVER['REQUEST_METHOD'] == "GET") {
-    $data = [];
     $parametros = $_GET;
-    $sql = "SELECT * FROM producto ORDER BY prod_id ASC";
-    $resultado = $mysqli->query($sql);
+    // filtrar por id, precio, tag
+    if(isset($_GET['q']) && $_GET['q'] == true ){ // validate query request
+        if( isset($_GET['prod_f']) && $_GET['prod_f'] == "business"){
 
-    if($resultado->num_rows > 0){
-        while($fila = $resultado->fetch_assoc()){
-            $data[] = $fila;
+            $sql = "SELECT * FROM producto WHERE tag = 'business' ORDER BY prod_id ASC";
+
+            echo json_encode( fetchDB($sql, $mysqli) );
+
+        }
+        if( isset($_GET['prod_f']) && $_GET['prod_f'] == "teddies"){
+            
+            $sql = "SELECT * FROM producto WHERE tag = 'teddies' ORDER BY prod_id ASC";
+
+            echo json_encode( fetchDB($sql, $mysqli) );
+
+        }
+        if( isset($_GET['prod_f']) && ($_GET['prod_f'] == "other" || $_GET['prod_f'] == "others") ) { // all - buss & toys 
+
+            $sql = "SELECT * FROM producto WHERE NOT tag = 'business' AND NOT tag = 'teddies' ORDER BY prod_id ASC ";
+
+            echo json_encode( fetchDB($sql, $mysqli) );
+
         }
 
-        $respuesta = [ "status"=> 200, "response"=>$data];
-
-        echo json_encode($respuesta);
+        else{
+            echo "Filter error";
+        }
     }else{
-        $respuesta = ["status"=> 200, "response"=> [] ];
+        $sql = "SELECT * FROM producto ORDER BY prod_id ASC";
+        
+        echo json_encode( fetchDB($sql, $mysqli) );
 
-        echo json_encode($respuesta);
     }
 }
 
-if($_SERVER['REQUEST_METHOD'] == "POST"){
-    if(isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] == 'application/json') {
-        $requestDATAJSON = file_get_contents('php://input');
-        $parametros = json_decode($requestDATAJSON, TRUE);
-    }else{
-        $parametros = $_POST;
-    }
-
-    // prod_nombre	prod_precio	prod_image	prod_review	prod_descr	prod_cant	propietario_empresa
-
-    if(isset($parametros['nombre_p']) && isset($parametros['precio_p']) 
-        && isset($parametros['img_p']) && isset($parametros['review_p']) 
-        && isset($parametros['descr_p']) && isset($parametros['cant_p'])
-        && isset($parametros['empresa_p']) ){
-
-        $insert = sprintf("INSERT INTO producto (prod_nombre, prod_precio, prod_img, prod_review, prod_descr, prod_cant, prod_empresa) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-            $parametros['nombre_p'], $parametros['precio_p'], $parametros['img_p'],
-            $parametros['review_p'], $parametros['descr_p'], $parametros['cant_p'],
-            $parametros['empresa_p']
-        );
-
-        if($mysqli->query($insert)){
-            $respuesta = [status=> 201, 
-            "response"=> [ 
-                "id" => $mysqli->insert_id, "empresa" => $parametros['empresa_p'], 
-                "nombre" => $parametros['nombre_p'], "precio" => $parametros['precio_p'], 
-                "imagen_url" => $parametros['img_p'], "review" => $parametros['review_p'], 
-                "descripcion" => $parametros['descr_p'], "cantidad" => $parametros['cant_p']
-            ]
-        ];
-        }else{
-            $respuesta = ["status"=> 500, "response"=> "error"];
-        }
-
-        echo json_encode($respuesta);
-
-    }else {
-        $respuesta = [ "status"=> 401, "response" => 'no, verificar formulario' ];
-
-        echo json_encode($respuesta);
-    }
-}
 
 if($_SERVER['REQUEST_METHOD'] == "PUT"){
     if(isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] == 'application/json') {
@@ -80,13 +73,6 @@ if($_SERVER['REQUEST_METHOD'] == "PUT"){
         $parametros = json_decode($requestDataJSON, TRUE);
     }else{
         $parametros = $_POST;
-    }
-
-    $mysqli = new mysqli("localhost", "root", "", "tofudb");
-    $mysqli->set_charset("utf8");
-
-    if($mysqli->connect_errno){
-        echo "Fallo".$mysqli->connect_error;
     }
 
     // prod_id prod_nombre prod_precio prod_image prod_review prod_descr prod_cant prod_empresa
@@ -130,4 +116,5 @@ if($_SERVER['REQUEST_METHOD'] == "PUT"){
     }
     
 }
+
 ?>

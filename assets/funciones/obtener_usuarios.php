@@ -48,7 +48,9 @@ if($_SERVER['REQUEST_METHOD'] == "GET") {
         }
 
     }else{
-        echo "Filter error";
+        $sql = "SELECT * FROM usuario ORDER BY user_id";
+
+        echo json_encode( fetchDB($sql, $mysqli) );
     }
 
 }

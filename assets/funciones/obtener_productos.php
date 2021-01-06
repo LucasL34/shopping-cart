@@ -1,28 +1,68 @@
 <?php
 header('Content-type: application/json');
-require_once("./database.php");
+require("./database.php");
 
 $resultado = null;
 $parametros = null;
 
-if($_SERVER['REQUEST_METHOD'] == "GET") {
-    $data = [];
-    $parametros = $_GET;
-    $sql = "SELECT * FROM producto ORDER BY prod_id ASC";
-    $resultado = $mysqli->query($sql);
+function fetchDB( $cadena, $mysqli){ 
 
-    if($resultado->num_rows > 0){
-        while($fila = $resultado->fetch_assoc()){
-            $data[] = $fila;
+    $arr = []; // save data & return
+
+    if($resultado = $mysqli->query($cadena)){
+
+        if($resultado->num_rows > 0){
+            while ($fila = $resultado->fetch_assoc()) {
+                $arr[] = $fila;
+            }
+
+            $respuesta = [ "status"=> 200, "response"=>$arr ];
+        }
+        else{
+            $respuesta = [ "status"=> 200, "response"=> [] ];
+        }
+    }else{
+        $respuesta = [ "status"=> 404, "response"=> "error" ];
+    }
+
+    return $respuesta;
+
+}
+
+if($_SERVER['REQUEST_METHOD'] == "GET") {
+    $parametros = $_GET;
+    // filtrar por id, precio, tag
+    if(isset($_GET['q']) && $_GET['q'] == true ){ // validate query request
+        if( isset($_GET['prod_f']) && $_GET['prod_f'] == "business"){
+
+            $sql = "SELECT * FROM producto WHERE tag = 'business' ORDER BY prod_id ASC";
+
+            echo json_encode( fetchDB($sql, $mysqli) );
+
+        }
+        if( isset($_GET['prod_f']) && $_GET['prod_f'] == "teddies"){
+            
+            $sql = "SELECT * FROM producto WHERE tag = 'teddies' ORDER BY prod_id ASC";
+
+            echo json_encode( fetchDB($sql, $mysqli) );
+
+        }
+        if( isset($_GET['prod_f']) && ($_GET['prod_f'] == "other" || $_GET['prod_f'] == "others") ) { // all - buss & toys 
+
+            $sql = "SELECT * FROM producto WHERE NOT tag = 'business' AND NOT tag = 'teddies' ORDER BY prod_id ASC ";
+
+            echo json_encode( fetchDB($sql, $mysqli) );
+
         }
 
-        $respuesta = [ "status"=> 200, "response"=>$data];
-
-        echo json_encode($respuesta);
+        else{
+            echo "Filter error";
+        }
     }else{
-        $respuesta = ["status"=> 200, "response"=> [] ];
+        $sql = "SELECT * FROM producto ORDER BY prod_id ASC";
+        
+        echo json_encode( fetchDB($sql, $mysqli) );
 
-        echo json_encode($respuesta);
     }
 }
 
@@ -118,4 +158,5 @@ if($_SERVER['REQUEST_METHOD'] == "PUT"){
     }
     
 }
+
 ?>

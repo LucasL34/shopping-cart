@@ -1,6 +1,6 @@
 <?php 
-    $mysqli = new mysqli("localhost", "root", "", "tofuDB");
-    // $mysqli = new mysqli("localhost", "id14281637_tofudb", "UYtorIjl0h=EtjdE", "id14281637_admin");
+    $mysqli = new mysqli("localhost", "root", "", "tofudb"); // test
+    // $mysqli = new mysqli("localhost", "id14281637_tofudb", "UYtorIjl0h=EtjdE", "id14281637_admin"); //host
 
     $mysqli->set_charset("utf8");
 

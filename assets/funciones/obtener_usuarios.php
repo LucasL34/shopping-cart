@@ -46,7 +46,12 @@ if($_SERVER['REQUEST_METHOD'] == "GET") {
             
             echo json_encode( fetchDB($sql, $mysqli) );
         }
-
+        if ( isset($_GET['designers']) && $_GET['designers'] == true ) {
+            
+            $sql = "SELECT * FROM designers WHERE des_id = 1 OR des_id = 2 OR des_id = 3";
+            //echo $sql;
+            echo json_encode( fetchDB($sql, $mysqli) );
+        }
     }else{
         $sql = "SELECT * FROM usuario ORDER BY user_id";
 

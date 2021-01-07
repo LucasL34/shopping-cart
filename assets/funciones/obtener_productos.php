@@ -56,7 +56,9 @@ if($_SERVER['REQUEST_METHOD'] == "GET") {
         }
 
         else{
-            echo "Filter error";
+            $sql = "SELECT * FROM producto ORDER BY user_id";
+
+            echo json_encode( fetchDB($sql, $mysqli) );
         }
     }else{
         $sql = "SELECT * FROM producto ORDER BY prod_id ASC";

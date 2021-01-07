@@ -1,14 +1,11 @@
 
-//var $fileName = document.URL.split("/");
+// modificar todas las funciones y hacer inicio de sesion en php
 
-//var arr = $fileName[$fileName.length - 1];
-//var newFocus = arr.split("#");
 var monto = 0;
 
 var api_prod = "./assets/funciones/obtener_productos.php";
 var api_user = "./assets/funciones/obtener_usuarios.php";
 
-//newFocus[0] == "index.php" || newFocus[0] == "index.html"
 if ( document.querySelector("#index") ){
 
     window.onload = function() {
@@ -20,9 +17,6 @@ if ( document.querySelector("#index") ){
 
 }
 
-//var prodURL = newFocus[0].split("?");
-
-//prodURL[0] == "producto.php" || prodURL[0] == "producto.html"
 if( document.querySelector("#producto_main") ){
 
     window.onload = function () {
@@ -35,7 +29,6 @@ if( document.querySelector("#producto_main") ){
     }
 }
 
-//prodURL[0] == "filtrar.php" || prodURL[0] == "filtrar.html"
 if( document.querySelector("#filtrar_main") ){
     window.onload = function(){
         cargarUsuario();

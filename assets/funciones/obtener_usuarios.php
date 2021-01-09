@@ -33,9 +33,12 @@ if($_SERVER['REQUEST_METHOD'] == "GET") {
     $parametros = $_GET;
 
     if( isset($_GET['q']) && $_GET['q'] == true ) {
-        if( isset($_GET['user_f']) && $_GET['user_f'] == 'id'){ // filter by id
-            $sql = "SELECT * FROM usuario WHERE user_id=".$_GET['id'];
-            
+
+        if( isset($_GET['byid']) ) {
+
+            $id = $_GET['byid'];
+            $sql = "SELECT * FROM usuario WHERE prod_id=$id";
+
             echo json_encode( fetchDB($sql, $mysqli) );
         }
 
@@ -46,17 +49,18 @@ if($_SERVER['REQUEST_METHOD'] == "GET") {
             echo json_encode( fetchDB($sql, $mysqli) );
         }
         if ( isset($_GET['designers']) && $_GET['designers'] == true ) { // get designers data
-            /*
                 $id_first = $_GET['id1'];
                 $id_second = $_GET['id2'];
                 $id_third = $_GET['id3'];
                 /* verification 
-                echo $id_first + "<br>";
-                echo $id_second + "<br>";
-                echo $id_third + "<br>";
-            */
-            $sql = "SELECT * FROM designers WHERE des_id = 1 OR des_id = 2 OR des_id = 3"; // multiple selection by id
+                echo $id_first . " - ";
+                echo $id_second . " - ";
+                echo $id_third . "  ";*/
             
+            $sql = "SELECT * FROM designers WHERE des_id = $id_first OR des_id = $id_second OR des_id = $id_third"; // multiple selection by id
+
+            
+
             echo json_encode( fetchDB($sql, $mysqli) );
         }
     }else{

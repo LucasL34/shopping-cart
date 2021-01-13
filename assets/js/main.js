@@ -11,7 +11,6 @@ var $carrito = document.querySelector("#carrito");
 if ( document.querySelector("#index") ){ // in main page
 
     window.onload = function() {
-        cargarUsuario();
         randomDesigners();
         fetchingData();
         document.title = "Toru | Shop";
@@ -22,7 +21,6 @@ if ( document.querySelector("#index") ){ // in main page
 if( document.querySelector("#producto_main") ){ // prod page
 
     window.onload = function () {
-        cargarUsuario();
         verificarCarrito();
         cargarProducto();
     }
@@ -33,7 +31,6 @@ if( document.querySelector("#producto_main") ){ // prod page
 
 if( document.querySelector("#filtrar_main") ){ // filter page
     window.onload = function(){
-        cargarUsuario();
         verificarCarrito();
         cargarFiltro();
         document.title = "Toru | Filtrar producto";
@@ -68,7 +65,7 @@ function innerElement( $elemento, $destino ){
 
 async function business(){
 
-    var $empresario = document.querySelector("#ofertas_prod");
+    var $empresario = document.querySelector("#business_prod");
     var $element = "";
 
     url = api_prod + "?q=true&prod_f=business";
@@ -84,7 +81,7 @@ async function business(){
 
 async function toys(){
 
-    var $toys = document.querySelector("#muniecos_prod");
+    var $toys = document.querySelector("#toys_prod");
     var url = api_prod + "?q=true&prod_f=teddies";
     var toys = "";
 
@@ -112,39 +109,6 @@ function cardFactory(data){
             </article>`;
 
     return Card;
-}
-
-async function cargarUsuario(){ // cambiar a php
-    var id = localStorage.getItem("user_id");
-    var usuario = "";
-    var creado = false;
-    var $nav = document.querySelector("#control");
-    var $nombre = document.querySelector("#username_p");
-
-    $nav.innerHTML = "";
-
-    if ( !id ){ // session 
-        usuario += `<a class="navLink" href="./register.html"> Registrarse </a>
-            <a class="navLink" href="./login.html"> Iniciar sesión </a>`;
-    }else{
-        usuario += `
-            <div id="perfil">
-                <img src="./assets/img/store.svg" alt="Icono de carrito" id="carrito" onclick="MostrarCarrito()">
-                <span>!Hola, <b id="username_p"> Cargando... </b>!</span>
-                <span class="icon-download3" onclick="cerrarSesion()">
-            </div>
-        `;
-        creado = true;        
-    }
-
-    $nav.innerHTML += usuario;
-
-    if (creado) {
-        let url = api_user + "?q=true&byid="+ id;
-        let response = await fetchData(url);
-
-        $nombre.innerText = response[0].user_username;
-    }
 }
 
 async function randomDesigners(){
@@ -526,7 +490,6 @@ function cerrarSesion() {
         document.querySelector("#prod_comprar").setAttribute("disabled", true);
         document.querySelector("#prod_comprar").classList.add("disabled")
     }
-    cargarUsuario();
 }
 
 function abrirPublicacion(id) { // open card 
@@ -577,6 +540,28 @@ function categoria(categoria) {
     review += " </span>";
 
     return review;
+}
+
+function error(nro){
+    const $error = document.querySelector("#error");
+    
+    switch (nro) {
+        case 0:
+            $error.innerText = "Las contraseñas no coinciden.";
+            $error.classList.remove("opacity_0")
+            break;
+        case 1:
+            $error.innerText = "Usuario no registrado, verificar nombre de usuario.";
+            $error.classList.remove("opacity_0")
+            break;
+        case 2: 
+            $error.innerText = "Nombre de usuario ya registrado, intente con otro.";
+            $error.classList.remove("opacity_0")
+            break;
+        default:
+            $error.innerText = "Contraseña o nombre de usuario incorrectos.";
+    }
+
 }
 
 function setMonto(value) { monto += value; }

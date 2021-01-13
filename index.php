@@ -82,17 +82,17 @@
     </div>
 
     <section class="content" id="index">
-        <div id="muniecos">
+        <div class="collection_div" id="toys">
             <h2> Videogames MERCH </h2>
             <hr class="separador">
-            <div id="muniecos_prod"></div>
+            <div class="collection" id="toys_prod"></div>
         </div>
 
-        <a name="ofertas"></a>
-        <div id="ofertas">
+        <a name="business"></a>
+        <div class="collection_div" id="business">
             <h2> CORTE EMPRESAURIO </h2>
             <hr class="separador">
-            <div id="ofertas_prod"></div>
+            <div class="collection" id="business_prod"></div>
         </div>
         <a name="productos"></a>
         <div id="productos"> </div>
@@ -115,7 +115,7 @@
             <h4> Inicio </h4>
             <hr class="separador">
             <a href="#top"> Videojuegos MERCH </a>
-            <a href="#ofertas"> Empresarios </a>
+            <a href="#business"> Empresarios </a>
             <a href="#productos"> Productos </a>
         </div>
 
@@ -149,7 +149,7 @@
 
 function session_on($name){ //with login
     echo '<img src="./assets/img/store.svg" alt="Icono de carrito" id="carrito" onclick="MostrarCarrito()">';
-    echo '<span>!Hola, <b id="username_p">'.$name.'</b>!</span>';
+    echo '<span id="username_p">!Hola, <b>'.$name.'</b>!</span>';
     echo '<span class="icon-download3" onclick="cerrarSesion()">';
 }
 

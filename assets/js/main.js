@@ -133,8 +133,8 @@ async function randomDesigners(){
         designer += `
             <div class="designers_post">
                 <img src="./assets/img/designers/${data[i].des_id}.png" alt="Imagen de ${data[i].des_name}">
-                <h2> ${data[i].des_name} </h2>
-                <small> @${data[i].des_username} </small>
+                <h2 class="designers_name"> ${data[i].des_name} </h2>
+                <small class="designers_username"> @${data[i].des_username} </small>
             </div>`;
     }
 
@@ -478,18 +478,20 @@ function cargarFiltro(){
 
 }
 
-/* Funciones basicas */ 
+/* Basics functions */ 
 
 function cerrarSesion() {
+
     localStorage.removeItem("user_id");
 
-    if ( document.querySelector("#producto_main") ){
-        // when logout disabled buy & car buttons
+    if ( document.querySelector("#producto_main") ){  // when logout disabled buy & car buttons 
         document.querySelector("#prod_add_carrito").setAttribute("disabled", true);
         document.querySelector("#prod_add_carrito").classList.add("disabled")
         document.querySelector("#prod_comprar").setAttribute("disabled", true);
         document.querySelector("#prod_comprar").classList.add("disabled")
     }
+
+    location.href = "./assets/funciones/logout.php";
 }
 
 function abrirPublicacion(id) { // open card 

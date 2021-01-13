@@ -87,13 +87,21 @@
                 
                 if ( $resultado = $mysqli->query($sql) ){
                     if($resultado->num_rows > 0){
-                        
-                        $_SESSION['login'] = true;
-                        $_SESSION['username'] = $username;
 
-                        echo '<script> window.location.href = "./index.php" </script>';
+                        $values = $resultado->fetch_assoc(); 
+
+                        $_SESSION['login'] = true; // verified login
+                        $_SESSION['username'] = $username; 
+                        
+                        echo '<script>
+                                localStorage.setItem("user_id", '.$values['user_id'].');
+                                location.href = "./index.php";
+                            </script>';
+                            // save id user and redirection
+                            
                     }else{
                         echo '<script> error(1) </script>'; 
+                        // Unregistered user
                     }
                 }
             }

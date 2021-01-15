@@ -1,3 +1,7 @@
+<?php 
+    session_start(); 
+    require("./assets/funciones/database.php");
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -29,8 +33,10 @@
 <body>
     <div class="content" id="login"></div>
         <nav class="nav">
-            <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo">
-            <a class="navLink" href="./register.html"> Unirse </a>
+            <a href="./index.php" id="logoVinculo">
+                <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo" id="logoShop">
+            </a>
+            <a class="navLink" href="./register.php"> Unirse </a>
         </nav>
         <header class="header">
             <h2 class="bienvenide" id="bien_i">Bienvenid@</h2>
@@ -41,7 +47,7 @@
                 <label for="username"> USERNAME: <span class="color-red">*</span></label>
 
                 <div class="inputContainer">
-                    <input type="text" name="username" id="username" class="inputs" required autocomplete="off">
+                    <input type="text" id="username" class="inputs" required autocomplete="off" name="username_l">
                 </div>
             
                 <label for="password">PASSWORD: <span class="color-red">*</span> </label>
@@ -49,12 +55,12 @@
                 <div class="inputContainer">
                     <span class="icon-key2" onclick="olvido()"></span>
                     <span class="icon-eye" onclick="mostrarContrasenia(this)"></span>
-                    <input type="password" name="pass" class="inputs pass" id="pass" required autocomplete="off">
+                    <input type="password" class="inputs pass" id="pass" required autocomplete="off" name="pass_l">
                 </div>
                 <p class="color-red warning opacity_0" id="error"></p>
             </fieldset>
             
-            <input type="submit" value="Ingresar uwu">            
+            <input type="submit" value="Ingresar uwu" name="submit_l">
         </form>
         <p class="decoracion"> Si no tienes cuenta, registrate haciendo <a class="vinculo" href="./register.html"> click aquí </a>.</p>
     
@@ -69,5 +75,36 @@
     </footer>
     <script src="./assets/js/main.js"></script>
     <script src="./assets/js/AccountMannager.js"></script>
+    <?php if (isset($_POST['submit_l'])) {
+            if ( isset($_POST['username_l']) && isset($_POST['pass_l']) ) {
+
+                $username = $_POST['username_l'];
+                $pass = $_POST['pass_l'];
+
+                $pass = md5($pass);
+
+                $sql = "SELECT * FROM usuario WHERE user_username = '$username' AND user_pass = '$pass'";
+                
+                if ( $resultado = $mysqli->query($sql) ){
+                    if($resultado->num_rows > 0){
+
+                        $values = $resultado->fetch_assoc(); 
+
+                        $_SESSION['login'] = true; // verified login
+                        $_SESSION['username'] = $username; 
+                        
+                        echo '<script>
+                                localStorage.setItem("user_id", '.$values['user_id'].');
+                                location.href = "./index.php";
+                            </script>';
+                            // save id user and redirection
+                            
+                    }else{
+                        echo '<script> error(1) </script>'; 
+                        // Unregistered user
+                    }
+                }
+            }
+        } ?>
 </body>
 </html>

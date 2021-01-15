@@ -1,17 +1,5 @@
 *{margin: 0; padding: 0; box-sizing: border-box;}
 
-/* 
-#00a96a verde claro
-#00502b verde oscuro
-#010006 negro
-------
-#fed766 amarillo
-#fe4a49 naranja
-#761ae4 violeta
-#d9bbf9 gros
-#2de5d7 verde
-*/
-
 body{
     max-width: 100vw;
     min-height: 100vh;
@@ -19,6 +7,7 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background-color: rgba( 0, 0, 0, 0.1);
 }
 div.content{
     width: 100%;
@@ -30,7 +19,22 @@ div.content{
     filter: blur(4px);
 }
 div#login{
-    background-image: url("../img/background-login.png");
+    background-image: url("../img/background/login.png");
+}
+#pass_body{
+    align-items: center;
+}
+div#pass{
+    background-image: url("../img/background/password.png");
+    background-position: center;
+}
+form#password{
+    height: 60vh;
+    color: #010006;
+    align-items: center;
+}
+fieldset.fieldset > input[name="new_pass"]{
+    margin-left: 0;
 }
 nav.nav{
     width: 100%;
@@ -75,7 +79,7 @@ fieldset.fieldset{
     flex-direction: column;
     justify-content: space-around;
     align-items: flex-start;
-    padding: 0 2em;
+    padding: 0 1em 0 3em;
 }
 p.decoracion{
     padding-left: 1em;
@@ -134,18 +138,20 @@ footer.footer{
     width: 100%;
 }
 footer.footerSesion{
-    height: 5vh;
+    height: 5.75vh;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1em;
 }
 div#footerRedes{
-    width: 15%;
+    width: 100%;
+    max-width: 300px;
     height: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
+    
 }
 input[type="submit"]{
     background-color: #00502b;
@@ -162,10 +168,6 @@ input[type="submit"]:hover{
     color: #010006;
 }
 
-.color-red{ color: #fed766; }
-.opacity_0{ opacity: 0; }
-.display-none{ display: none !important; }
-.warning::before{ content: "► "; }
 .warning{
     transition: 250ms;
     font-weight: bold;
@@ -173,7 +175,7 @@ input[type="submit"]:hover{
 
 /* Register */
 div#register{
- background-image: url("../img/bg-register.png");
+ background-image: url("../img/background/register.png");
  background-position: center;
 }
 fieldset#fieldset_r > label{
@@ -187,19 +189,23 @@ a#logoVinculo{
     width: auto;
     height: 100%;
 }
-div#control{
-    width: 20%;
+.control{
+    width: 30%;
+    max-width: 250px;
     height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+#control_pass{
+    justify-content: space-evenly;
+}
+#control_index{
+    justify-content: space-between;
+}
 #carrito{
     width: 25%;
     height: 75%;
-}
-#carrito:hover{
-    cursor: pointer;
 }
 div#perfil{
     width: 100%;
@@ -211,9 +217,6 @@ div#perfil{
 span.icon-download3{
     transform: rotate(-90deg);
     font-size: 1.5em;
-}
-span.icon-download3:hover{
-    cursor: pointer;
 }
 form#form_s{
     width: 50%;
@@ -256,46 +259,32 @@ section.content{
     align-items: center;
 }
 
-div#muniecos{
-    width: 100%;
-    height: 60vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    padding: 2em;
-}
-div#muniecos > h2, div#ofertas > h2{
+div#toys > h2, div#business > h2{
     color: #010006;
 }
-div#muniecos_prod{
+.collection_div{
     width: 100%;
-    height: 80%;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 3em;
-    justify-items: center;
-}
-div#ofertas{
-    width: 100%;
-    height: 65vh;
+    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    background-color: #d9bbf9;
+    padding: 2em;
 }
-div#ofertas_prod{
+.collection{
     width: 100%;
+    max-width: 1200px;
     height: 80%;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 2em;
-    padding: 2em;
-    justify-items: center;
+    grid-template-columns: 250px 250px 250px;
+    grid-auto-rows: 300px;
+    gap: 3em;
+    justify-content: space-evenly;
+    align-items: center;
 }
 div#productos{
     width: 100%;
+    max-width: 1360px;
     height: auto;
     min-height: 50vh;
     padding: 1em;
@@ -304,8 +293,8 @@ div#productos{
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-auto-rows: 325px;
     gap: 2em;
-    justify-items: center;
-    align-content: center;
+    justify-content: center;
+    align-items: center;
 }
 div#designers{
     width: 100%;
@@ -319,13 +308,13 @@ div#designers{
 }
 div#designers_prod{
     width: 90%;
+    max-width: 1360px;
     height: 85%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-auto-rows: 85%;
     gap: 3em;
-    justify-items: center;
-    align-content: center;
+    align-items: center;
 }
 div.designers_post{
     width: 100%;
@@ -333,16 +322,16 @@ div.designers_post{
     display: grid;
     grid-template-rows: 75% 10% 10%;
     gap: 0.5em;
-    justify-items: center;
-    align-content: center;
+    justify-content: center;
+    align-items: center;
 }
 div.designers_post > img{
     width: auto;
-    height: 85%;
+    height: 75%;
     border-radius: 50%;
     border: 3px solid #fff;
+    margin: 0 auto;
 }
-
 
  /* shop - post */
 article.post{
@@ -352,8 +341,8 @@ article.post{
     padding: 0.5em;
     display: grid;
     grid-auto-rows: 80% 20%;
-    justify-items: center;
-    align-content: center;
+    justify-content: center;
+    align-items: center;
     transition: 50ms;
     /* box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.2); */
 }
@@ -363,10 +352,6 @@ article.post:hover{
 }
 img.producto_foto{
     width: 100%;
-    height: 100%;
-}
-div#muniecos_prod > .post > img.producto_foto{
-    width: 75%;
     height: 100%;
 }
 div.producto_info{
@@ -419,6 +404,10 @@ div#carritoUI{
 div#carritoUI > hr{
     width: 90%;
 }
+#carrito_p{
+    margin-top: 1em;
+    opacity: 75%;
+}
 div#carritoUI_section{
     width: 100%;
     min-height: 20vh;
@@ -452,11 +441,8 @@ div#producto_main{
     height: 80vh;
     display: grid;
     grid-template-columns: 60% 35%;
-    justify-items: center;
-    align-content: center;
-}
-div#red{
-    padding: 0 2em;
+    justify-content: center;
+    align-items: center;
 }
 div#blue, div#red{
     width: 100%;
@@ -490,7 +476,7 @@ input#prod_add_carrito{
     color: #010006;
 }
 input#prod_add_carrito:hover{
-    background-color: #fe4a49;
+    background-color: #ff595e;
 }
 input#prod_add_carrito-comprado_{
     background-color: #c4c4c4;
@@ -531,8 +517,8 @@ div.carrito_div_{
     height: 100%;
     display: grid;
     grid-template-columns: 30% 70%;
-    justify-items: center;
-    align-content: center;
+    justify-content: center;
+    align-items: center;
     background-color: rgba( 0, 0, 0, 0.05);
 }
 img.carrito_img_{
@@ -551,19 +537,14 @@ span.prod_precio_carrito::before{
     font-weight: bold;
     color: #00502b;
 }
-
-
-
-span.muy_bueno{ color: #761ae4;}
-span.bueno{ color: #2de5d7;}
-span.regular{ color: #d9bbf9;}
-span.malo{ color: #fed766;}
-span.muy_malo{ color: #fe4a49;}
-
-footer#footerShop{
+footer#footerShop {
+    /* grid area */
     background-color: #00502b;
     height: 30vh;
     display: grid;
+    grid-template-areas: 
+    "nosotros inicio contacto"
+    "section section section";
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 80% 20%;
 }
@@ -571,12 +552,14 @@ div.creditos{
     width: 100%;
     height: 100%;
     background-color: #010006;
-    display: flex;
+    display: grid;
+    grid-area: section;
+    grid-template-columns: 1fr 1fr 0.75fr;
     justify-content: center;
-    align-items: center;
+    align-items: center
 }
-div.creditos > #footerRedes{
-    width: 75%;
+.creditos > i {
+    text-align: center;
 }
 div#nosotros > a[href="#inicio"]{
     height: auto;
@@ -604,14 +587,62 @@ div#inicio > a:hover, div#nosotros > a:hover{
 }
 hr.separador{
     width: 60%;
+    margin: 0.5em 0;
+    text-align: center;
+}
+span[class|="icon"]:hover{
+    cursor: pointer;
+    color: #00502b;
+}
+
+/* 
+colours web
+    #00a96a verde claro
+    #00502b verde oscuro
+    #010006 negro
+colours review
+    #fed766 amarillo
+    #fe4a49 naranja
+    #d9bbf9 gros
+review v2
+    #ff595e very bad (red)
+    #1982c4 regular (light blue)
+    #6a4c93 very good (purple) */
+
+div#business{ background-color: #d9bbf9; }
+
+span.icon-download3:hover, #carrito:hover{ cursor: pointer; }
+
+div#red{  padding: 0 2em; }
+
+span.muy_bueno{ color: #6a4c93;}
+span.bueno{ color: #00a96a;}
+span.regular{ color: #1982c4;}
+span.malo{ color: #fe4a49;}
+span.muy_malo{ color: #ff595e;}
+
+.color-red{ color: #ff595e; }
+.opacity_0{ opacity: 0; }
+.display-none{ display: none !important; }
+.warning::before{ content: "► "; }
+
+#contacto{ grid-area: contacto; }
+#inicio{ grid-area: inicio; }
+#nosotros{ grid-area: nosotros; }
+
+.designers_name, .designers_username{
     text-align: center;
 }
 
 /*  -- media screen -- */
 
 @media screen and (min-width: 1420px){
-    div#control{
-        width: 25%;
+    .control{
+        width: 30%;
+        max-width: 300px;
+    }
+    #username_p{
+        font-size: 1.5em;
     }
     div#perfil > span{
         font-size: 1.8em;
@@ -636,8 +667,14 @@ hr.separador{
     div.creditos > i{
         font-size: 1.6em;
     }
-    div#footerRedes > span, div.designers_post{
+    div#footerRedes > span{
         font-size: 2em;
+    }
+    .designers_name, .designers_username{
+        font-size: 1.8em;
+    }
+    div.designers_post{
+        justify-content: unset;
     }
     /* Producto */
     div#producto_main{
@@ -695,19 +732,23 @@ hr.separador{
         text-align: center;
     }
     div#footerRedes{
-        width: 50%;
+        width: 100%;
+        justify-content: space-evenly;
+    }
+    div.creditos{
+        grid-template-columns: 1fr 1fr 1fr;
     }
     input[type="submit"]{
         margin: unset;
     }
     .inputContainer{
-        max-width: 200px;
+        max-width: 250px;
     }
     fieldset#fieldset_r > .inputContainer{
         max-width: 250px;
     }
     /* shop */
-    div#control{
+    .control{
         width: 40%;
     }
     div#perfil > span{
@@ -716,23 +757,29 @@ hr.separador{
     form#form_s{
         width: 75%;
     }
-    div#muniecos, div#ofertas, div#designers{
+    div#toys, div#business, div#designers{
         height: auto;
     }
-    div#muniecos_prod, div#ofertas_prod, div#productos{
-        grid-template-columns: 1fr 1fr;
+    div#productos{
+        grid-template-columns: 1fr 1fr 1fr;
         grid-auto-rows: 300px;
-        gap: 1em;
+        gap: 3em;
     }
-    div#ofertas{
-        padding: 0.5em 0;
+    div.collection{
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-auto-rows: 300px;
     }
     div#designers_prod{
         width: 100%;
-        padding: 8px 0;
-        grid-template-columns: none;
-        grid-auto-rows: 350px;
-        gap: 3em;
+        grid-template-columns: repeat(3, 250px);
+        grid-auto-rows: 300px;
+        padding: 1em;
+        gap: 1em;
+    }
+    div.designers_post{
+        max-width: 200px;
+        grid-template-rows: 60% 25% 15%;
+        gap: 0;
     }
     div#designers > h2{
         font-size: 2.2em;
@@ -740,18 +787,23 @@ hr.separador{
     }
     footer#footerShop{
         height: auto;
-        grid-template-columns: none;
-        grid-template-rows: 30% 30%;
+        grid-template-areas:
+        "nosotros"
+        "inicio"
+        "contacto"
+        "section";
+        grid-template-columns: 1fr;
+        grid-template-rows: 31% 32% 32% 5%;
     }
     div.footerSection{
         padding: 8px 0;
         font-size: 1.5em;
     }
     div.creditos > i{
-        font-size: 1.6em;
+        font-size: 1.2em;
     }
-    div#footerRedes > span, div.designers_post{
-        font-size: 2em;
+    div#footerRedes > span{
+        font-size: 1.2em;
     }
     /* producto */
     div#producto_main{
@@ -763,10 +815,19 @@ hr.separador{
     }
 }
 
+
 @media screen and (max-width: 450px){
     form.loginForm{
-        width: 80%;
+        width: 100%;
+        margin: unset;
     }
+    fieldset.fieldset{
+        padding:0 1em;
+    }
+    form#password > fieldset.fieldset > input[name="new_pass"]{
+        margin: 0 auto;
+    }
+
     /* shop */
     nav.nav{
         padding: 0;
@@ -774,8 +835,12 @@ hr.separador{
     a#logoVinculo{
         height: 80%;
     }
-    div#control{
-        width: 30%;
+    .control{
+        width: 40%;
+        justify-content: center;
+    }
+    #username_p{
+        display: none;
     }
     div#perfil > span:not(.icon-download3){
         display: none;
@@ -789,10 +854,10 @@ hr.separador{
     form#form_s{
         flex-direction: column;
     }
-    div#muniecos, div#ofertas, div#designers{
+    div#toys, div#business, div#designers{
         height: auto;
     }
-    div#muniecos_prod, div#ofertas_prod, div#productos, div#designers_prod{
+    div#productos, div#toys_prod, div#business_prod, div#designers_prod{ /* (480px) one line prods */
         grid-template-columns: none;
         grid-auto-rows: 300px;
         gap: 0.5em;
@@ -803,17 +868,30 @@ hr.separador{
     }
     footer#footerShop{
         height: auto;
-        grid-template-columns: none;
-        grid-template-rows: 30% 30%;
+        grid-template-areas: 
+        " nosotros "
+        " inicio "
+        " contacto "
+        "section"; 
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr 0.75fr;
     }
     div.footerSection{
         padding: 16px 0;
+    }
+    div.creditos{
+        grid-template-columns: 1fr;
+        grid-auto-flow: 1fr 1fr 1fr;
+    }
+    div#footerRedes{
+        width: 75%;
+        margin: 0 auto;
     }
     /* producto */
     div#producto_main{
         height: auto;
         grid-template-columns: none;
-        align-content: unset;
+        align-items: unset;
     }
     div#blue, div#red{
         height: auto;

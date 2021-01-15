@@ -1,137 +1,101 @@
 
-//var $fileName = document.URL.split("/");
+// modificar todas las funciones y hacer inicio de sesion en php
 
-//var arr = $fileName[$fileName.length - 1];
-//var newFocus = arr.split("#");
 var monto = 0;
 
 var api_prod = "./assets/funciones/obtener_productos.php";
 var api_user = "./assets/funciones/obtener_usuarios.php";
 
-//newFocus[0] == "index.php" || newFocus[0] == "index.html"
-if ( document.querySelector("#index") ){
+var $carrito = document.querySelector("#carrito");
+
+if ( document.querySelector("#index") ){ // in main page
 
     window.onload = function() {
-        obtenerPublicacion();
-        cargarUsuario();
         randomDesigners();
+        fetchingData();
         document.title = "Toru | Shop";
     };
 
 }
 
-//var prodURL = newFocus[0].split("?");
-
-//prodURL[0] == "producto.php" || prodURL[0] == "producto.html"
-if( document.querySelector("#producto_main") ){
+if( document.querySelector("#producto_main") ){ // prod page
 
     window.onload = function () {
-        cargarUsuario();
         verificarCarrito();
         cargarProducto();
     }
-    if( prodURL[1] == undefined ){
+    if( false ){ // eliminar y hacerlo por php
         location.href = "./index.html";
     }
 }
 
-//prodURL[0] == "filtrar.php" || prodURL[0] == "filtrar.html"
-if( document.querySelector("#filtrar_main") ){
+if( document.querySelector("#filtrar_main") ){ // filter page
     window.onload = function(){
-        cargarUsuario();
         verificarCarrito();
         cargarFiltro();
         document.title = "Toru | Filtrar producto";
     }
 }
 
-function crearPublicacion( string, $destino ){
-    $destino.innerHTML += string;
-}
+const fetchData = (url) => { // get data from api
+    return new Promise( (resolve, reject)=>{
+        fetch( url , { method: "GET"} )
+        .then( response => { return response.json() } )
+        .then( data => { resolve(data.response) } )
+        .catch( err => { console.error(err) } )
+    });
+};
 
-
-function obtenerPublicacion(){
-
-    fetch(api_prod, { method: "GET" } )
-    .then( response =>{
-        return response.json();
-    })
-    .then( data =>{
-        //6,3,14 corte empresario
-        // 26, 29, 30 muñecos
-        for(let i in data.response){
-
-            var $empresario = document.querySelector("#ofertas_prod");
-            var $productos = document.querySelector("#productos");
-            var $juegos = document.querySelector("#muniecos_prod");
-
-            if (data.response[i].prod_id != "6" && data.response[i].prod_id != "3" && data.response[i].prod_id != "14") {
-                if (data.response[i].prod_id == "26" || data.response[i].prod_id == "29" || data.response[i].prod_id == "30") {
-                    crearPublicacion( publicacionFactory(data.response[i]), $juegos);
-                } else {
-                    crearPublicacion(publicacionFactory(data.response[i]), $productos);
-                }
-            } else {
-                crearPublicacion(publicacionFactory(data.response[i]), $empresario);
-            }
-
-        }
-    })
-    .catch( err =>{
-        console.error(err);
-    })
-}
-
-var $carrito = document.querySelector("#carrito");
-
-function cargarUsuario(){
-    var id = localStorage.getItem("user_id");
-    var usuario = "";
-    var creado = false;
-    var $nav = document.querySelector("#control");
-
-    $nav.innerHTML = "";
-
-    if (id == undefined || id == null ){
-        usuario += `<a class="navLink" href="./register.html"> Registrarse </a>
-            <a class="navLink" href="./login.html"> Iniciar sesión </a>`;
-    }else{
-        usuario += `
-            <div id="perfil">
-                <img src="./assets/img/store.svg" alt="Icono de carrito" id="carrito" onclick="MostrarCarrito()">
-                <span>!Hola, <b id="username_p"> Cargando... </b>!</span>
-                <span class="icon-download3" onclick="cerrarSesion()">
-            </div>
-        `;
-        creado = true;        
+async function fetchingData(){ // insert in web
+    var url = api_prod + "/?q=true&prod_f=others"; // filter all products - business & toys
+    var $productos = document.querySelector("#productos");
+    var response = await fetchData(url);
+    
+    for (let i=0;i < response.length; i++) {
+        innerElement( cardFactory(response[i]), $productos );
     }
 
-    $nav.innerHTML += usuario;
-
-    if (creado) {
-        fetch(api_user, { method: "GET" })
-        .then(response => {
-            return response.json();
-        })
-        .then(data => {
-            var $nombre = document.querySelector("#username_p");
-            for (let i in data.response) {
-                if (id == data.response[i].user_id) {
-                    $nombre.innerText = data.response[i].user_username;
-                }
-            }
-        })
-        .catch(err => {
-            console.error(err);
-        })    
-    }
+    business();
+    toys();
 }
 
-function publicacionFactory(data){
-    let string = "";
+function innerElement( $elemento, $destino ){ 
+    $destino.innerHTML += $elemento;
+}
 
-    string += `
-            <article class="post" onclick="abrirPublicacion(${data.prod_id})">
+async function business(){
+
+    var $empresario = document.querySelector("#business_prod");
+    var $element = "";
+
+    url = api_prod + "?q=true&prod_f=business";
+
+    let response = await fetchData(url);
+
+    for (let i = 0; i < response.length; i++) {
+        $element += cardFactory(response[i]);
+    }
+
+    innerElement($element, $empresario);
+}
+
+async function toys(){
+
+    var $toys = document.querySelector("#toys_prod");
+    var url = api_prod + "?q=true&prod_f=teddies";
+    var toys = "";
+
+    let response = await fetchData(url);
+
+    for (let i = 0; i < response.length; i++) {
+        toys += cardFactory(response[i]);
+    }
+
+    innerElement(toys, $toys);
+}
+
+function cardFactory(data){
+    let Card = `<article class="post" onclick="abrirPublicacion(${data.prod_id})">
                 <img src="./assets/img/productos/${data.prod_image}" class="producto_foto" alt="${data.prod_nombre}">
                 <div class="producto_info">
                     <h4 class="producto_nombre"> ${data.prod_nombre} </h4>
@@ -144,108 +108,84 @@ function publicacionFactory(data){
                 </div>
             </article>`;
 
-    return string;
+    return Card;
 }
 
-function randomDesigners(){
-
-    fetch(api_user, { method: "GET" })
-        .then(response => {
-            return response.json();
-        })
-        .then(data => {
-            mostrarDesigners(data.response);
-        })
-        .catch(err => {
-            console.error(err);
-        })
-}
-
-function mostrarDesigners(data){
-    const $design = document.querySelector("#designers_prod");
-    var rand = [];
-    var img = [];
+async function randomDesigners(){
     var designer = "";
+    let array = [];
+    const $design = document.querySelector("#designers_prod");
 
-    for (let i = 0; i < 3; i++) {
-        rand[i] = Math.floor(Math.random() * (31 - 1)) + 1;
-        img[i] = Math.floor(Math.random() * (18 - 0)) + 0;
+    for (let i = 0; i < 3; i++) { // function + no repeat 
+        array[i] = Math.floor(Math.random() * (18 - 1)) + 1;
     }
+
+    var sortArray = array.sort(function (a, b) { return a - b; }); // sort array
     
-    var j = 0;
-    var newRand = rand.sort(function (a, b) { return a - b; }); // ordenar array
+    let url = api_user + "?q=true&designers=true"; //filter random id's
+    url += "&id1="+sortArray[0];
+    url += "&id2="+sortArray[1];
+    url += "&id3="+sortArray[2];
+
+    let data = await fetchData(url);
 
     for (let i in data) {
-        if(Number(data[i].user_id) == newRand[j] && j<3){
-            designer += `
-                <div class="designers_post">
-                    <img src="./assets/img/designers/${img[j]}.png" alt="Imagen de ${data[i].user_nombre}">
-                    <h2> @${data[i].user_username} </h2>
-                    <span> ${data[i].user_nombre} </span>
-                </div>
-            `;
-            j++;
-        }
+        designer += `
+            <div class="designers_post">
+                <img src="./assets/img/designers/${data[i].des_id}.png" alt="Imagen de ${data[i].des_name}">
+                <h2 class="designers_name"> ${data[i].des_name} </h2>
+                <small class="designers_username"> @${data[i].des_username} </small>
+            </div>`;
     }
 
-    $design.innerHTML = designer;
+    innerElement(designer, $design);
 }
 
 
-function cargarProducto(){
-    var id_p = localStorage.getItem("id_prod");
+async function cargarProducto(){
+    var id = localStorage.getItem("id_prod");
+    var urlbyId = api_prod + "?q=true&byid="+id;
 
-    fetch( api_prod, { method: "GET"} )
-    .then( response=>{
-        return response.json();
-    })
-    .then(data=>{
-        for(let i in data.response){
-            if(Number(data.response[i].prod_id) == id_p){
-                document.title = "Toru | " + data.response[i].prod_nombre;
-                // prod_nombre	prod_precio	prod_image	prod_review	prod_descr	prod_cant	propietario_empresa
-                document.querySelector("#prod_titulo").innerText = data.response[i].prod_nombre;
-                document.querySelector("#prod_descr_").innerText = data.response[i].prod_descr;
-                document.querySelector("#prod_review_").innerHTML = categoria(data.response[i].prod_review);
-                document.querySelector("#prod_precio_").innerText = data.response[i].prod_precio;
-                document.querySelector("#prod_img_").setAttribute("src", "./assets/img/productos/" + data.response[i].prod_image);
-                document.querySelector("#prod_img_").setAttribute("alt", data.response[i].prod_nombre);
-                if (Number(data.response[i].prod_cant) > 0 ){
-                    document.querySelector("#prod_stock").innerText = data.response[i].prod_cant;
-                }else{
-                    document.querySelector("#prod_stock").classList.add("stocknt");
-                    document.querySelector("#prod_stock").innerHTML = 'SIN STOCK';
-                    document.querySelector("#prod_comprar").setAttribute("disabled", true);
-                    document.querySelector("#prod_comprar").classList.add("disabled");
-                }
-                document.querySelector("#prod_empresa_").innerText = data.response[i].prod_empresa;
-            }
+    var $titulo = document.querySelector("#prod_titulo");
+    var $descr = document.querySelector("#prod_descr_");
+    var $review = document.querySelector("#prod_review_");
+    var $precio = document.querySelector("#prod_precio_");
+    var $img = document.querySelector("#prod_img_");
+    var $stock = document.querySelector("#prod_stock");
+    var $comprar = document.querySelector("#prod_comprar");
+    var $empresa = document.querySelector("#prod_empresa_");
+
+    var response = await fetchData(urlbyId);
+    let prod = response[0];
+
+    document.title = "Toru | " + prod.prod_nombre;
+        // prod_nombre	prod_precio	prod_image	prod_review	prod_descr	prod_cant	propietario_empresa
+    $titulo.innerText = prod.prod_nombre;
+    $descr.innerText = prod.prod_descr;
+    $review.innerHTML = categoria(prod.prod_review);
+    $precio.innerText = prod.prod_precio;
+    $img.setAttribute("src", "./assets/img/productos/" + prod.prod_image);
+    $img.setAttribute("alt", prod.prod_nombre);
+        if (Number(prod.prod_cant) > 0 ){
+            $stock.innerText = prod.prod_cant;
+        }else{
+            $stock.classList.add("stocknt");
+            $stock.innerHTML = 'SIN STOCK';
+            $comprar.setAttribute("disabled", true);
+            $comprar.classList.add("disabled");
         }
-    })
-    .catch(err => {
-        console.error(err);
-    })
+
+    $empresa.innerText = prod.prod_empresa;
 }
 
 const $comprar = document.querySelector("#prod_comprar");
 const $addCarrito = document.querySelector("#prod_add_carrito");
 
 
-function comprar(id) {
-    fetch( api_prod, { method: "GET" })
-    .then( response=>{
-        return response.json();
-    })
-    .then( data=>{
-        for(let i in data.response){
-            if(data.response[i].prod_id == id ){
-                restarStock( data.response[i] );
-            }
-        }
-    })
-    .catch(err=>{
-        console.error(err);
-    })
+async function comprar(id) {
+    url = api_user + "?q=true&byid="+id;
+    let response = await fetchData(url);
+    restarStock( response[0] );
 }
 
 function restarStock(producto_restar){
@@ -285,18 +225,11 @@ function restarStock(producto_restar){
     })
 }
 
-function comprarTodo_(){
-    fetch( api_user, {method: "GET"} )
-    .then(response=>{
-        return response.json();
-    })
-    .then(data=>{
-        for(let i in data.response){
-            if(data.response[i].user_id == localStorage.getItem("user_id")){
-                limpiarRegistroUsuario(data.response[i]);
-            }
-        }
-    })
+async function comprarTodo_(){
+    let id = localStorage.getItem("user_id");
+    url = api_user + "?q=true&byid="+id;
+    let response = await fetchData(url);
+    limpiarRegistroUsuario(response[0]);
 }
 
 function limpiarRegistroUsuario(usuario){
@@ -324,7 +257,7 @@ function limpiarRegistroUsuario(usuario){
             monto = 0;
             document.querySelector("#precioTotal").innerText = getMonto();
             document.querySelector("#carritoUI_section").innerHTML = "";
-            if (prodURL[0] == "producto.php" || prodURL[0] == "producto.html") {
+            if( document.querySelector("#producto_main") ){
                 $carrito.value = "Añadir al carrito";
                 $carrito.id = "prod_add_carrito";
                 $carrito.removeAttribute("disabled");
@@ -336,22 +269,12 @@ function limpiarRegistroUsuario(usuario){
         })
 }
 
-function addCarrito(id) { // boton mediante html
+async function addCarrito(id) { // boton mediante html
+    let url = api_prod + "?q=true&byid="+id;
 
-    fetch( api_user, { method: "GET"})
-    .then(response=>{
-        return response.json();
-    })
-    .then(data=>{
-        for (let i in data.response) {
-            if( data.response[i].user_id == localStorage.getItem('user_id')){
-                actualizarUsuario(data.response[i], id);
-            }
-        }
-    })
-    .catch(err=>{
-        console.error(err);
-    })
+    var data = await fetchData(url);
+
+    actualizarUsuario(data[0], id);
 }
 
 function actualizarUsuario(data, id){
@@ -361,10 +284,8 @@ function actualizarUsuario(data, id){
         user_nombre: data.user_nombre,
         user_username: data.user_username,
         user_pass: data.user_pass,
-        user_carrito: (data.prods_carrito+","+id),
+        user_carrito: (data.prods_carrito+","+id), // update with id 
     };
-
-    // user_nombre	user_username	user_pass	prods_carrito
 
     fetch( api_user, { 
         method: "PUT",
@@ -385,70 +306,55 @@ function actualizarUsuario(data, id){
     })
 }
 
-
-function MostrarCarrito(){ // abre el carritoUI
+async function MostrarCarrito(){ // abre el carritoUI
 
     let $carritoUI = document.querySelector("#carritoUI");
+    let id = localStorage.getItem("user_id");
+    let url = api_user + "?q=true&byid="+ id;
+
     $carritoUI.classList.toggle("display-none");
 
     if($carritoUI.className != "display-none") {
 
-        fetch( api_user, { method: "GET"} )
-        .then( response=>{
-            return response.json();
-        })
-        .then( data=>{
-            for (let i in data.response ) {
-                if( data.response[i].user_id == localStorage.getItem("user_id") ){
-                    agregarProductosCarrito(data.response[i].prods_carrito);
-                    document.querySelector("#precioTotal").innerText = getMonto();
-                }
-            }
-        })
-        .catch(err=>{
-            console.error(err);
-        })
+        var data = await fetchData(url);
+
+        agregarProductosCarrito(data[0]);
+        document.querySelector("#precioTotal").innerText = getMonto();
+
     }else{
         monto = 0;
     }
 }
 
-function agregarProductosCarrito(carrito) {
+async function agregarProductosCarrito(carrito) {
+    
+    var data = await fetchData(api_prod);
+    
+    var j = 1;
+    var arr = carrito.split(",");
+    var arrayProds = arr.sort(function (a, b) { return a - b; });
+    const $carritoDiv = document.querySelector("#carritoUI_section");
+    var productosCar = "";
 
-    fetch( api_prod, { method: "GET"} )
-    .then(response=>{
-        return response.json();
-    })
-    .then(data=>{
-        var j = 1;
-        var carritoArr = carrito.split(",");
-        var newArr = carritoArr.sort(function (a, b) { return a - b; });
-        const $carritoDiv = document.querySelector("#carritoUI_section");
-        var productosCar = "";
-
-        for (let i in data.response) {
-            if ( data.response[i].prod_id == newArr[j] ){
-                productosCar += `
-                    <div class="carrito_div_">
-                        <img src="./assets/img/productos/${data.response[i].prod_image}" alt="${data.response[i].prod_nombre}" class="carrito_img_">
-                        <div class="carrito_div_section">
-                            <h5> ${recortarTitle(data.response[i].prod_nombre)} </h5> 
-                            <span class="prod_review_carrito"> ${categoria(data.response[i].prod_review)} </span>
-                            <span class="prod_precio_carrito"> ${data.response[i].prod_precio} </span>
-                            <span class="icon-cross"></span>
-                        </div>
-                    </div>`;
-                setMonto(Number(data.response[i].prod_precio));
-                colocarProducto(productosCar);
-                j++;
-            }
+    for (let i in data) {
+        if ( data[i].prod_id == arrayProds[j] ){
+            productosCar += `
+                <div class="carrito_div_">
+                    <img src="./assets/img/productos/${data[i].prod_image}" alt="${data[i].prod_nombre}" class="carrito_img_">
+                    <div class="carrito_div_section">
+                        <h5> ${recortarTitle(data[i].prod_nombre)} </h5> 
+                        <span class="prod_review_carrito"> ${categoria(data[i].prod_review)} </span>
+                        <span class="prod_precio_carrito"> ${data[i].prod_precio} </span>
+                        <span class="icon-cross"></span>
+                    </div>
+                </div>`;
+            setMonto(Number(data[i].prod_precio));
+            colocarProducto(productosCar);
+            j++;
         }
-    })
-    .catch(err=>{
-        console.error(err);
-    })
+    }
+    
 }
-
 
 function colocarProducto(data){
     const $carritoDiv = document.querySelector("#carritoUI_section");
@@ -457,24 +363,15 @@ function colocarProducto(data){
     $carritoDiv.innerHTML = data;   
 }
 
-function verificarCarrito(){
+async function verificarCarrito(){
     
-    fetch( api_user , { method: "GET" } )
-    .then( response=> {
-        return response.json();
-    })
-    .then(data=>{
-        for (let i in data.response ) {
-            if (data.response[i].user_id == localStorage.getItem("user_id") ) {
-                bloquearBoton( data.response[i] );
-            }
-        }
-    })
-    .catch(err=>{
-        console.error(err);
-    })
+    var id = localStorage.getItem("user_id");
+    let url = api_user +"?q=true&byid="+id;
 
-    if(!localStorage.getItem("user_id") && document.querySelector("#producto_main") ){
+    var response = await fetchData(url);
+    bloquearBoton( response[0] );
+
+    if(!id && document.querySelector("#producto_main") ){
         let $carrito__ = document.querySelector("#prod_add_carrito");
         $carrito__.classList.add("disabled");
         $carrito__.setAttribute("disabled", true);
@@ -561,6 +458,7 @@ function cargarFiltro(){
 
     let $review = document.querySelector("#calificacion");
     var review__ = "";
+
     if(form.review == "99"){
         review__ = "Sin filtro";
     }else{
@@ -580,26 +478,28 @@ function cargarFiltro(){
 
 }
 
-/* Funciones basicas */ 
+/* Basics functions */ 
 
 function cerrarSesion() {
+
     localStorage.removeItem("user_id");
-    if (prodURL[0] == "producto.php" || prodURL[0] == "producto.html" ){
+
+    if ( document.querySelector("#producto_main") ){  // when logout disabled buy & car buttons 
         document.querySelector("#prod_add_carrito").setAttribute("disabled", true);
         document.querySelector("#prod_add_carrito").classList.add("disabled")
         document.querySelector("#prod_comprar").setAttribute("disabled", true);
         document.querySelector("#prod_comprar").classList.add("disabled")
     }
-    cargarUsuario();
+
+    location.href = "./assets/funciones/logout.php";
 }
 
-function abrirPublicacion(id) {
+function abrirPublicacion(id) { // open card 
     localStorage.setItem("id_prod", id);
     location.href = "./producto.html?prod_id=" + id;
 }
 
 function mostrarContrasenia(ojo) {
-
     const $pass = ojo.nextElementSibling;
 
     if ($pass.type == "password") {
@@ -613,12 +513,13 @@ function mostrarContrasenia(ojo) {
 }
 
 function recortarTitle(string) {
-    const limite = 10;
+    const limit = 10;
     let newString = "";
-    for (let i = 0; i < limite; i++) {
+    for (let i = 0; i < limit; i++) {
         newString += string[i];
     }
     newString += "...";
+
     return newString;
 }
 
@@ -642,5 +543,28 @@ function categoria(categoria) {
 
     return review;
 }
+
+function error(nro){
+    const $error = document.querySelector("#error");
+    
+    switch (nro) {
+        case 0:
+            $error.innerText = "Las contraseñas no coinciden.";
+            $error.classList.remove("opacity_0")
+            break;
+        case 1:
+            $error.innerText = "Usuario no registrado, verificar nombre de usuario.";
+            $error.classList.remove("opacity_0")
+            break;
+        case 2: 
+            $error.innerText = "Nombre de usuario ya registrado, intente con otro.";
+            $error.classList.remove("opacity_0")
+            break;
+        default:
+            $error.innerText = "Contraseña o nombre de usuario incorrectos.";
+    }
+
+}
+
 function setMonto(value) { monto += value; }
 function getMonto() { return Math.round(monto * 100) / 100; }

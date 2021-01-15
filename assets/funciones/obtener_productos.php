@@ -33,6 +33,15 @@ if($_SERVER['REQUEST_METHOD'] == "GET") {
     $parametros = $_GET;
     // filtrar por id, precio, tag
     if(isset($_GET['q']) && $_GET['q'] == true ){ // validate query request
+        
+        if( isset($_GET['byid']) ) {
+
+            $id = $_GET['byid'];
+            $sql = "SELECT * FROM producto WHERE prod_id=$id";
+
+            echo json_encode( fetchDB($sql, $mysqli) );
+
+        }
         if( isset($_GET['prod_f']) && $_GET['prod_f'] == "business"){
 
             $sql = "SELECT * FROM producto WHERE tag = 'business' ORDER BY prod_id ASC";
@@ -55,9 +64,6 @@ if($_SERVER['REQUEST_METHOD'] == "GET") {
 
         }
 
-        else{
-            echo "Filter error";
-        }
     }else{
         $sql = "SELECT * FROM producto ORDER BY prod_id ASC";
         

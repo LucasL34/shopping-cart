@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -33,7 +34,13 @@
         <a href="#top" id="logoVinculo">
             <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo" id="logoShop">
         </a>
-        <div id="control"></div>
+        <div class="control" id="control_index"><?php
+            if(isset($_SESSION['login'])){
+                session_on($_SESSION['username']);
+            }else{
+                session_off();
+            }
+        ?></div>
     </nav>
 
     <div id="filtrarDiv">
@@ -61,9 +68,10 @@
     
     <div id="carritoUI" class="display-none">
         <h2> Carrito </h2>
-        <hr>
+        
+        <p id="carrito_p"> Sin productos agregados:( </p>
         <div id="carritoUI_section">
-            <span></span>
+            <span></span> <!-- invisible aux span -->
             <span></span>
         </div>
         <hr>
@@ -74,17 +82,17 @@
     </div>
 
     <section class="content" id="index">
-        <div id="muniecos">
+        <div class="collection_div" id="toys">
             <h2> Videogames MERCH </h2>
             <hr class="separador">
-            <div id="muniecos_prod"></div>
+            <div class="collection" id="toys_prod"></div>
         </div>
 
-        <a name="ofertas"></a>
-        <div id="ofertas">
+        <a name="business"></a>
+        <div class="collection_div" id="business">
             <h2> CORTE EMPRESAURIO </h2>
             <hr class="separador">
-            <div id="ofertas_prod"></div>
+            <div class="collection" id="business_prod"></div>
         </div>
         <a name="productos"></a>
         <div id="productos"> </div>
@@ -107,7 +115,7 @@
             <h4> Inicio </h4>
             <hr class="separador">
             <a href="#top"> Videojuegos MERCH </a>
-            <a href="#ofertas"> Empresarios </a>
+            <a href="#business"> Empresarios </a>
             <a href="#productos"> Productos </a>
         </div>
 
@@ -121,20 +129,32 @@
         
         <div class="creditos">
             <i> toru 2020 </i>
-        </div>
-        <div class="creditos">
+        
             <i> Términos y condiciones </i>
-        </div>
-        <div class="creditos">
+        
             <div id="footerRedes">
                 <span class="icon-facebook"></span>
                 <span class="icon-pinterest"></span>
                 <span class="icon-instagram"></span>
                 <span class="icon-twitter"></span>
             </div>
+            
         </div>
     </footer>
-
     <script src="./assets/js/main.js"></script>
 </body>
 </html>
+<?php
+
+function session_on($name){ //with login
+    echo '<img src="./assets/img/store.svg" alt="Icono de carrito" id="carrito" onclick="MostrarCarrito()">';
+    echo '<span id="username_p">!Hola, <b>'.$name.'</b>!</span>';
+    echo '<span class="icon-download3" onclick="cerrarSesion()">';
+}
+
+function session_off(){ //without login
+    echo '<a class="navLink" href="./register.php"> Registrarse </a>';
+    echo '<a class="navLink" href="./login.php"> Iniciar sesión </a>';
+}
+
+?>

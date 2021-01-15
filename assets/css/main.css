@@ -19,7 +19,22 @@ div.content{
     filter: blur(4px);
 }
 div#login{
-    background-image: url("../img/background-login.png");
+    background-image: url("../img/background/login.png");
+}
+#pass_body{
+    align-items: center;
+}
+div#pass{
+    background-image: url("../img/background/password.png");
+    background-position: center;
+}
+form#password{
+    height: 60vh;
+    color: #010006;
+    align-items: center;
+}
+fieldset.fieldset > input[name="new_pass"]{
+    margin-left: 0;
 }
 nav.nav{
     width: 100%;
@@ -64,7 +79,7 @@ fieldset.fieldset{
     flex-direction: column;
     justify-content: space-around;
     align-items: flex-start;
-    padding: 0 2em;
+    padding: 0 1em 0 3em;
 }
 p.decoracion{
     padding-left: 1em;
@@ -160,7 +175,7 @@ input[type="submit"]:hover{
 
 /* Register */
 div#register{
- background-image: url("../img/bg-register.png");
+ background-image: url("../img/background/register.png");
  background-position: center;
 }
 fieldset#fieldset_r > label{
@@ -174,13 +189,19 @@ a#logoVinculo{
     width: auto;
     height: 100%;
 }
-div#control{
+.control{
     width: 30%;
     max-width: 250px;
     height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+#control_pass{
+    justify-content: space-evenly;
+}
+#control_index{
+    justify-content: space-between;
 }
 #carrito{
     width: 25%;
@@ -353,7 +374,7 @@ div.producto_info_section{
     align-items: center;
     color: #010006;
 }
-span.precio:before{
+span.precio::before{
     content: "$";
     font-weight: bold;
     color: #00502b;
@@ -410,7 +431,7 @@ div#mostrarTotal{
     font-weight: bold;
     text-align: center;
 }
-#precioTotal:before{
+#precioTotal::before{
     content: "$";
 }
 
@@ -465,7 +486,7 @@ input#procesando_{
     background-color: #fed766;
     color: #010006;
 }
-span#prod_stock:not(.stocknt):before{
+span#prod_stock:not(.stocknt)::before{
     content: "Stock: x";
     font-weight: bold;
 }
@@ -477,15 +498,15 @@ input.disabled{
     background-color: #c4c4c4 !important;
     box-shadow: none;
 }
-span#prod_precio_:before{
+span#prod_precio_::before{
     content: "Precio: $";
     font-weight: bold;
 }
-span#prod_empresa_:before{
+span#prod_empresa_::before{
     content: "Empresa: ";
     font-weight: bold;
 }
-span#prod_review_:before{
+span#prod_review_::before{
     content: "Calificación: ";
     font-weight: bold;
 }
@@ -511,7 +532,7 @@ div.carrito_div_section{
     justify-content: space-around;
     align-items: center;
 }
-span.prod_precio_carrito:before{
+span.prod_precio_carrito::before{
     content: "$";
     font-weight: bold;
     color: #00502b;
@@ -603,7 +624,7 @@ span.muy_malo{ color: #ff595e;}
 .color-red{ color: #ff595e; }
 .opacity_0{ opacity: 0; }
 .display-none{ display: none !important; }
-.warning:before{ content: "► "; }
+.warning::before{ content: "► "; }
 
 #contacto{ grid-area: contacto; }
 #inicio{ grid-area: inicio; }
@@ -616,7 +637,7 @@ span.muy_malo{ color: #ff595e;}
 /*  -- media screen -- */
 
 @media screen and (min-width: 1420px){
-    div#control{
+    .control{
         width: 30%;
         max-width: 300px;
     }
@@ -721,13 +742,13 @@ span.muy_malo{ color: #ff595e;}
         margin: unset;
     }
     .inputContainer{
-        max-width: 200px;
+        max-width: 250px;
     }
     fieldset#fieldset_r > .inputContainer{
         max-width: 250px;
     }
     /* shop */
-    div#control{
+    .control{
         width: 40%;
     }
     div#perfil > span{
@@ -797,8 +818,16 @@ span.muy_malo{ color: #ff595e;}
 
 @media screen and (max-width: 450px){
     form.loginForm{
-        width: 80%;
+        width: 100%;
+        margin: unset;
     }
+    fieldset.fieldset{
+        padding:0 1em;
+    }
+    form#password > fieldset.fieldset > input[name="new_pass"]{
+        margin: 0 auto;
+    }
+
     /* shop */
     nav.nav{
         padding: 0;
@@ -806,7 +835,7 @@ span.muy_malo{ color: #ff595e;}
     a#logoVinculo{
         height: 80%;
     }
-    div#control{
+    .control{
         width: 40%;
         justify-content: center;
     }

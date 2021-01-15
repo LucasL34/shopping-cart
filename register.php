@@ -69,14 +69,14 @@
     <p class="decoracion" id="decoracion_r"> Si ya tienes cuenta, ingresa con el siguiente <a class="vinculo" id="vinculo_r" href="./register.html"> enlace </a>.</p>
 
     <footer class="footer footerSesion">
-    <i> toru 2020 </i>
-    <div id="footerRedes">
-        <span class="icon-facebook"></span>
-        <span class="icon-pinterest"></span>
-        <span class="icon-instagram"></span>
-        <span class="icon-twitter"></span>
-    </div>
-</footer>
+        <i> toru 2020 </i>
+        <div id="footerRedes">
+            <span class="icon-facebook"></span>
+            <span class="icon-pinterest"></span>
+            <span class="icon-instagram"></span>
+            <span class="icon-twitter"></span>
+        </div>
+    </footer>
 
 <script src="./assets/js/main.js"></script>
 <script src="./assets/js/AccountMannager.js"></script>

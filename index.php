@@ -34,7 +34,7 @@
         <a href="#top" id="logoVinculo">
             <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo" id="logoShop">
         </a>
-        <div id="control"><?php
+        <div class="control" id="control_index"><?php
             if(isset($_SESSION['login'])){
                 session_on($_SESSION['username']);
             }else{

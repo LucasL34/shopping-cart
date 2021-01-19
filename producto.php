@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -29,10 +30,16 @@
 </head>
 <body>
     <nav class="nav">
-        <a href="./index.html#top" id="logoVinculo">
+        <a href="./index.php#top" id="logoVinculo">
             <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo" id="logoShop">
         </a>
-        <div id="control"></div>
+        <div class="control"><?php
+            if(isset($_SESSION['login'])){
+                session_on($_SESSION['username']);
+            }else{
+                session_off();
+            }
+        ?></div>
     </nav>
 
     <div id="carritoUI" class="display-none">
@@ -42,7 +49,7 @@
         </div>
         <hr>
         <div id="mostrarTotal">
-            <input type="submit" id="comprar_todo" value="Comprar todo" onclick="comprarTodo_()">
+            <input type="submit" id="comprar_todo" value="Comprar todo" onclick="buyCarrito()">
             <span id="precioTotal"></span>
         </div>
     </div>
@@ -62,8 +69,8 @@
             </div>
             <hr class="separador">
             <div id="prod_button">
-                <input type="submit" class="button" id="prod_comprar" value="Comprar" onclick="comprar(localStorage.getItem('id_prod'))">
-                <input type="submit" class="button" id="prod_add_carrito" value="Añadir al carrito" onclick="addCarrito(localStorage.getItem('id_prod'))">
+                <input type="submit" class="button" id="prod_comprar" value="Comprar" onclick="buy(<?php echo $_GET['prod_id'] ?>)">
+                <input type="submit" class="button" id="prod_add_carrito" value="Añadir al carrito" onclick="addCarrito(<?php echo $_GET['prod_id'] ?>, '<?php echo $_SESSION['username'] ?>')">
             </div>
         </div>
     </div>
@@ -93,11 +100,8 @@
         
         <div class="creditos">
             <i> toru 2020 </i>
-        </div>
-        <div class="creditos">
             <i> Términos y condiciones </i>
-        </div>
-        <div class="creditos">
+        
             <div id="footerRedes">
                 <span class="icon-facebook"></span>
                 <span class="icon-pinterest"></span>
@@ -110,3 +114,17 @@
     <script src="./assets/js/main.js"></script>
 </body>
 </html>
+<?php
+
+function session_on($name){ //with login
+    echo '<img src="./assets/img/store.svg" alt="Icono de carrito" id="carrito" onclick="MostrarCarrito()">';
+    echo '<span id="username_p">!Hola, <b>'.$name.'</b>!</span>';
+    echo '<span class="icon-download3" onclick="cerrarSesion()">';
+}
+
+function session_off(){ //without login
+    echo '<a class="navLink" href="./register.php"> Registrarse </a>';
+    echo '<a class="navLink" href="./login.php"> Iniciar sesión </a>';
+}
+
+?>

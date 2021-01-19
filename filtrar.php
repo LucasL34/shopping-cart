@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -28,10 +29,16 @@
 </head>
 <body>
     <nav class="nav" id="filtrar_main">
-        <a href="./index.html#top" id="logoVinculo">
+        <a href="./index.php#top" id="logoVinculo">
             <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo" id="logoShop">
         </a>
-        <div id="control"></div>
+        <div class="control"><?php
+            if(isset($_SESSION['login'])){
+                session_on($_SESSION['username']);
+            }else{
+                session_off();
+            }
+        ?></div>
     </nav>
 
     <div id="carritoUI" class="display-none">
@@ -47,29 +54,37 @@
     </div>
     
     <div id="filtrarDiv">
-            <form action="./filtrar.html" method="POST" id="form_s">
-                <select id="calificacion" class="select" name="review_f">
-                    <option value="99" disabled selected hidden> Calificación </option>
-                    <option value="0"> Muy bueno </option>
-                    <option value="1"> Bueno </option>
-                    <option value="2"> Regular </option>
-                    <option value="3"> Malo </option>
-                    <option value="4"> Muy malo </option>
-                </select>
+        <form action="./filtrar.html" method="POST" id="form_s">
+            <select id="calificacion" class="select" name="review_f">
+                <option value="99" disabled selected hidden> Calificación </option>
+                <option value="0"> Muy bueno </option>
+                <option value="1"> Bueno </option>
+                <option value="2"> Regular </option>
+                <option value="3"> Malo </option>
+                <option value="4"> Muy malo </option>
+            </select>
 
-                <select id="precio" class="select" name="precio_f">
-                    <option value="999999" disabled selected hidden> Precio </option>
-                    <option value="2000"> Menos de $2.000 </option>
-                    <option value="5500"> Menos de $5.500 </option>
-                    <option value="10000"> Menos de $10.000 </option>
-                    <option value="100000"> Menos de $100.000 </option>
-                </select>
+            <select id="precio" class="select" name="precio_f">
+                <option value="999999" disabled selected hidden> Precio </option>
+                <option value="2000"> Menos de $2.000 </option>
+                <option value="5500"> Menos de $5.500 </option>
+                <option value="10000"> Menos de $10.000 </option>
+                <option value="100000"> Menos de $100.000 </option>
+            </select>
 
-                <input type="submit" name="filtrar" value="Filtrar" id="filtrarButton">
-            </form>
+            <input type="submit" name="filtrar" value="Filtrar" id="filtrarButton">
+        </form>
+    </div>
+    
+    <section class="content">
+        <p id="filtro_warning"></p>
+        <div id="productos"></div>
+        <div id="designers">
+            <h2> Top Designers </h2>
+            <hr class="separador">
+            <div id="designers_prod"></div>
         </div>
-
-    <div id="productos"></div>
+    </select>
 
     <footer class="footer" id="footerShop">
         <div class="footerSection" id="nosotros">
@@ -96,11 +111,7 @@
         
         <div class="creditos">
             <i> toru 2020 </i>
-        </div>
-        <div class="creditos">
             <i> Términos y condiciones </i>
-        </div>
-        <div class="creditos">
             <div id="footerRedes">
                 <span class="icon-facebook"></span>
                 <span class="icon-pinterest"></span>
@@ -113,3 +124,17 @@
     <script src="./assets/js/main.js"></script>
 </body>
 </html>
+<?php
+
+function session_on($name){ //with login
+    echo '<img src="./assets/img/store.svg" alt="Icono de carrito" id="carrito" onclick="MostrarCarrito()">';
+    echo '<span id="username_p">!Hola, <b>'.$name.'</b>!</span>';
+    echo '<span class="icon-download3" onclick="cerrarSesion()">';
+}
+
+function session_off(){ //without login
+    echo '<a class="navLink" href="./register.php"> Registrarse </a>';
+    echo '<a class="navLink" href="./login.php"> Iniciar sesión </a>';
+}
+
+?>

@@ -24,15 +24,13 @@ if( document.querySelector("#producto_main") ){ // prod page
         verificarCarrito();
         cargarProducto();
     }
-    if( false ){ // eliminar y hacerlo por php
-        location.href = "./index.html";
-    }
 }
 
 if( document.querySelector("#filtrar_main") ){ // filter page
     window.onload = function(){
         verificarCarrito();
         cargarFiltro();
+        randomDesigners();
         document.title = "Toru | Filtrar producto";
     }
 }
@@ -251,8 +249,9 @@ async function clearCarrito(usuario){
         user_carrito: "0",
     };
 
-    // user_nombre	user_username	user_pass	prods_carrito
     var $carrito = document.querySelector("#prod_add_carrito-comprado_");
+    var $p = document.querySelector("#carrito_p");
+    var $cartSection = document.querySelector("#carritoUI_section").children;
 
     try {
         var response = await putData(api_user, obj);
@@ -267,6 +266,11 @@ async function clearCarrito(usuario){
             $carrito.removeAttribute("disabled");
             cargarProducto(); // update info 
         }
+
+        if( $cartSection.length > 0 ){
+            $p.innerText = "Gracias por comprar";
+        }
+        
     }catch (err) {
         console.error(err);
     }
@@ -297,16 +301,34 @@ async function addCarrito(id, username) { // boton mediante html - id prod
     }
 }
 
+function innerCarrito($cart){
+    let $cartElement = `
+        <h2> Carrito </h2>
+
+            <p id="carrito_p"></p>
+            <div id="carritoUI_section"></div>
+            <hr>
+            <div id="mostrarTotal">
+                <input type="submit" id="comprar_todo" value="Comprar todo" onclick="buyCarrito()">
+                <span id="precioTotal"></span>
+            </div>
+    `;
+
+    innerElement($cartElement, $cart);
+}
 
 async function MostrarCarrito(){ // abre el carritoUI
 
-    let $carritoUI = document.querySelector("#carritoUI");
+    let $cart = document.querySelector("#carritoUI");
+    $cart.innerHTML = "";
+    innerCarrito($cart);
+
     let id = localStorage.getItem("user_id");
-    let url = api_user + "?q=true&byid="+ id;
+    var url = api_user + "?q=true&byid="+ id;
 
-    $carritoUI.classList.toggle("display-none");
+    $cart.classList.toggle("display-none");
 
-    if($carritoUI.className != "display-none") {
+    if($cart.className != "display-none") {
 
         var data = await fetchData(url);
         
@@ -315,6 +337,13 @@ async function MostrarCarrito(){ // abre el carritoUI
 
     }else{
         monto = 0;
+    }
+
+    var $p = document.querySelector("#carrito_p");
+    var $cartSection = document.querySelector("#carritoUI_section");
+
+    if ($cartSection.children.length === 0) {
+        $p.innerText = "Sin productos agregados:(";
     }
 }
 
@@ -378,7 +407,6 @@ function blockButton(userProds){
     let $carrito__ = document.querySelector("#prod_add_carrito");
     let arr = userProds.split(",");
     let arrSort = arr.sort(function(a, b){ return a-b; });
-    let j = 1;
     let id = localStorage.getItem("prod_id");
 
     for (let i = 0; i<arrSort.length; i++) {
@@ -407,36 +435,29 @@ $form_filtrar.onsubmit = function(e){
 
     localStorage.setItem("form_f", JSON.stringify(form_f));
     
-    location.href = "./filtrar.html";
+    location.href = "./filtrar.php";
     
 }
 
-function cargarFiltro(){
+async function cargarFiltro(){
     
+    var $productos = document.querySelector("#productos");
     var form = JSON.parse(localStorage.getItem("form_f"));
 
-    fetch( api_prod, { method: "GET" } )
-    .then(response => {
-        return response.json();
-    })
-    .then(data => {
-
-        var $productos = document.querySelector("#productos");
-
-        for (let i in data.response) {
-            if( Number(data.response[i].prod_precio) < Number(form.precio) ) {
-                if (form.review == "99" ){
-                    crearPublicacion( publicacionFactory(data.response[i]), $productos );
+    try{
+        let response = await fetchData(api_prod);
+        var data = response;
+        for (let i in data){
+            if( Number(data[i].prod_precio) < Number(form.precio) ) {
+                if (form.review == "99" ){ // all 
+                    innerElement( cardFactory(data[i]), $productos );
                 }
-                if (form.review == data.response[i].prod_review ) {
-                    crearPublicacion(publicacionFactory(data.response[i]), $productos );
+                if (form.review == data[i].prod_review ) {
+                    innerElement( cardFactory(data[i]), $productos );
                 }
             }
-        }
-    })
-    .catch(err => {
-        console.error(err);
-    })
+        }   
+    }catch (err) { console.error(err); }
 
     let $review = document.querySelector("#calificacion");
     var review__ = "";
@@ -458,6 +479,10 @@ function cargarFiltro(){
         }
     $precio.children[0].outerHTML = `<option value="${form.precio}" disabled selected hidden> ${precio__} </option>`;
 
+    if($productos.children.length === 0){
+        let $p = document.querySelector("#filtro_warning");
+        $p.innerText = "No se han encontrado productos.";
+    }
 }
 
 /* Basics functions */ 

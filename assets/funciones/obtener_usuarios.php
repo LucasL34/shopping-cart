@@ -37,7 +37,7 @@ if($_SERVER['REQUEST_METHOD'] == "GET") {
         if( isset($_GET['byid']) ) {
 
             $id = $_GET['byid'];
-            $sql = "SELECT * FROM usuario WHERE prod_id=$id";
+            $sql = "SELECT * FROM usuario WHERE user_id=$id";
 
             echo json_encode( fetchDB($sql, $mysqli) );
         }

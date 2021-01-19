@@ -1,10 +1,15 @@
-<?php session_start(); ?>
+<?php 
+    session_start(); 
+    if(!isset($_GET['prod_id'])){
+        echo '<script> location.href = "./index.php"; </script>';
+    }
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title> Cargando... </title>
 
     <link rel="apple-touch-icon" sizes="57x57" href="./assets/img/favicon/apple-icon-57x57.png">
@@ -42,17 +47,7 @@
         ?></div>
     </nav>
 
-    <div id="carritoUI" class="display-none">
-        <h2> Carrito </h2>
-        <hr>
-        <div id="carritoUI_section">
-        </div>
-        <hr>
-        <div id="mostrarTotal">
-            <input type="submit" id="comprar_todo" value="Comprar todo" onclick="buyCarrito()">
-            <span id="precioTotal"></span>
-        </div>
-    </div>
+    <div id="carritoUI" class="display-none"></div>
 
     <div id="producto_main">
         <div id="blue">

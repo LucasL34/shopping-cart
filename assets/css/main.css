@@ -172,6 +172,11 @@ input[type="submit"]:hover{
     transition: 250ms;
     font-weight: bold;
 }
+#filtro_warning{
+    color: #010006;
+    opacity: 50%;
+    margin-top: 1em;
+}
 
 /* Register */
 div#register{
@@ -400,6 +405,7 @@ div#carritoUI{
     align-items: center;
     padding: 1em;
     color: #010006;
+    z-index: 99;
 }
 div#carritoUI > hr{
     width: 90%;

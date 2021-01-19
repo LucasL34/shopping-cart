@@ -37,6 +37,24 @@ if( document.querySelector("#filtrar_main") ){ // filter page
     }
 }
 
+const putData = (url, obj) => {
+    // restar cantidad, = 0, sumar id
+    // pasarle el obj directamente y no crearlo aca 
+    
+    return new Promise( (resolve, reject)=>{
+        fetch( url, { 
+            method: "PUT",
+            body: JSON.stringify(obj),
+            headers: { 'Content-type' : 'application/json'}
+        })
+        .then( response=>{ return response.json() }) 
+        .then( data=>{ resolve(data.response) })
+        .catch( err=> { 
+            reject(new Error('Fallo en el put'))
+        })
+    });
+}
+
 const fetchData = (url) => { // get data from api
     return new Promise( (resolve, reject)=>{
         fetch( url , { method: "GET"} )
@@ -143,7 +161,7 @@ async function randomDesigners(){
 
 
 async function cargarProducto(){
-    var id = localStorage.getItem("id_prod");
+    var id = localStorage.getItem("prod_id");
     var urlbyId = api_prod + "?q=true&byid="+id;
 
     var $titulo = document.querySelector("#prod_titulo");
@@ -181,60 +199,51 @@ async function cargarProducto(){
 const $comprar = document.querySelector("#prod_comprar");
 const $addCarrito = document.querySelector("#prod_add_carrito");
 
-
-async function comprar(id) {
+async function buy(id) {
     url = api_user + "?q=true&byid="+id;
     let response = await fetchData(url);
-    restarStock( response[0] );
-}
-
-function restarStock(producto_restar){
 
     var $comprar = document.querySelector("#prod_comprar");
+    $comprar.id += " procesando_";
     $comprar.value = "Procesando...";
 
-    let datos = {
-        prod_id: producto_restar.prod_id,
-        prod_nombre: producto_restar.prod_nombre,
-        prod_precio: producto_restar.prod_precio,
-        prod_image: producto_restar.prod_image,
-        prod_review: producto_restar.prod_review,
-        prod_descr: producto_restar.prod_descr,
-        prod_cant: (Number(producto_restar.prod_cant) - 1 ),
-        prod_empresa: producto_restar.prod_empresa,
+    var datos = response[0];
+
+    let obj = {
+        prod_id: datos.prod_id,
+        prod_nombre: datos.prod_nombre,
+        prod_precio: datos.prod_precio,
+        prod_image: datos.prod_image,
+        prod_review: datos.prod_review,
+        prod_descr: datos.prod_descr,
+        prod_cant: (Number(datos.prod_cant) - 1 ),
+        prod_empresa: datos.prod_empresa,
     };
 
-    $comprar.id += " procesando_";
-
-    fetch( api_prod, { 
-        method: "PUT",
-        body: JSON.stringify(datos),
-        headers: { 'Content-Type' : 'application/json' }
-    } )
-    .then(response=>{
-        return response.json();
-    })
-    .then(data=>{
+    try{
+        let response = await putData(api_prod, obj);
         $comprar.value = "Comprar";
         $comprar.id = "prod_comprar";
         cargarProducto();
-    })
-    .catch(err=>{
-        $comprar.value = "Error";
+    }catch (err) {
         console.error(err);
-    })
+        $comprar.value = "Error";
+    }
 }
 
-async function comprarTodo_(){
+async function buyCarrito(){
     let id = localStorage.getItem("user_id");
+
     url = api_user + "?q=true&byid="+id;
+
     let response = await fetchData(url);
-    limpiarRegistroUsuario(response[0]);
+
+    clearCarrito(response[0]);
 }
 
-function limpiarRegistroUsuario(usuario){
+async function clearCarrito(usuario){
 
-    var arr = {
+    var obj = {
         user_id: usuario.user_id,
         user_nombre: usuario.user_nombre,
         user_username: usuario.user_username,
@@ -243,68 +252,51 @@ function limpiarRegistroUsuario(usuario){
     };
 
     // user_nombre	user_username	user_pass	prods_carrito
+    var $carrito = document.querySelector("#prod_add_carrito-comprado_");
 
-    fetch( api_user, {
-        method: "PUT",
-        body: JSON.stringify(arr),
-        headers: { 'Content-Type': 'application/json' }
-    })
-        .then(response => {
-            return response.json();
-        })
-        .then(data => {
-            let $carrito = document.querySelector("#prod_add_carrito-comprado_");
-            monto = 0;
-            document.querySelector("#precioTotal").innerText = getMonto();
-            document.querySelector("#carritoUI_section").innerHTML = "";
-            if( document.querySelector("#producto_main") ){
-                $carrito.value = "Añadir al carrito";
-                $carrito.id = "prod_add_carrito";
-                $carrito.removeAttribute("disabled");
-                cargarProducto();
-            }
-        })
-        .catch(err => {
-          console.error(err);
-        })
+    try {
+        var response = await putData(api_user, obj);
+
+        monto = 0;
+        document.querySelector("#precioTotal").innerText = getMonto();
+        document.querySelector("#carritoUI_section").innerHTML = "";
+
+        if( document.querySelector("#producto_main") ){ // producto.php
+            $carrito.value = "Añadir al carrito";
+            $carrito.id = "prod_add_carrito";
+            $carrito.removeAttribute("disabled");
+            cargarProducto(); // update info 
+        }
+    }catch (err) {
+        console.error(err);
+    }
 }
 
-async function addCarrito(id) { // boton mediante html
-    let url = api_prod + "?q=true&byid="+id;
+async function addCarrito(id, username) { // boton mediante html - id prod 
+    let url = api_user + "?q=true&user_f=name&name="+username;
 
     var data = await fetchData(url);
 
-    actualizarUsuario(data[0], id);
-}
-
-function actualizarUsuario(data, id){
-
-    var arr = {
-        user_id: data.user_id,
-        user_nombre: data.user_nombre,
-        user_username: data.user_username,
-        user_pass: data.user_pass,
-        user_carrito: (data.prods_carrito+","+id), // update with id 
+    let obj = {
+        user_id: data[0].user_id,
+        user_nombre: data[0].user_nombre,
+        user_username: data[0].user_username,
+        user_pass: data[0].user_pass,
+        user_carrito: (data[0].prods_carrito+","+id), // update with id 
     };
 
-    fetch( api_user, { 
-        method: "PUT",
-        body: JSON.stringify(arr),
-        headers: { 'Content-Type' : 'application/json' }
-    } )
-    .then(response=>{
-        return response.json();
-    })
-    .then(data=>{
+    try{
+        var response = await putData(api_user, obj);
+
         $addCarrito.value = "Añadido";
         $addCarrito.id += "-comprado_";
         $addCarrito.setAttribute("disabled", true);
-    })
-    .catch(err=>{
-        $addCarrito.value = "Error";
+    }catch(err){
         console.error(err);
-    })
+        $addCarrito.value = "Error";
+    }
 }
+
 
 async function MostrarCarrito(){ // abre el carritoUI
 
@@ -317,8 +309,8 @@ async function MostrarCarrito(){ // abre el carritoUI
     if($carritoUI.className != "display-none") {
 
         var data = await fetchData(url);
-
-        agregarProductosCarrito(data[0]);
+        
+        listProds( data[0].prods_carrito );
         document.querySelector("#precioTotal").innerText = getMonto();
 
     }else{
@@ -326,7 +318,7 @@ async function MostrarCarrito(){ // abre el carritoUI
     }
 }
 
-async function agregarProductosCarrito(carrito) {
+async function listProds(carrito) {
     
     var data = await fetchData(api_prod);
     
@@ -368,8 +360,8 @@ async function verificarCarrito(){
     var id = localStorage.getItem("user_id");
     let url = api_user +"?q=true&byid="+id;
 
-    var response = await fetchData(url);
-    bloquearBoton( response[0] );
+    var data = await fetchData(url);
+    blockButton( data[0].prods_carrito );
 
     if(!id && document.querySelector("#producto_main") ){
         let $carrito__ = document.querySelector("#prod_add_carrito");
@@ -381,31 +373,21 @@ async function verificarCarrito(){
     }
 }
 
-function bloquearBoton(usuario_prod_id){
+function blockButton(userProds){
 
-    fetch( api_prod, { method: "GET" } )
-    .then(response=>{
-        return response.json();
-    })
-    .then(data=>{
-        let arr = usuario_prod_id.prods_carrito.split(",");
-        let newArr = arr.sort(function(a, b){ return a-b; });
-        let $carrito__ = document.querySelector("#prod_add_carrito");
-        let j = 1;
-        for(let i in data.response){
-            if (data.response[i].prod_id == newArr[j] ){
-                if (data.response[i].prod_id == localStorage.getItem("id_prod")){
-                    $carrito__.classList.add("disabled");
-                    $carrito__.setAttribute("disabled", true);
-                    $carrito__.value = "Producto ya agregado";
-                }
-                j++;
-            }
+    let $carrito__ = document.querySelector("#prod_add_carrito");
+    let arr = userProds.split(",");
+    let arrSort = arr.sort(function(a, b){ return a-b; });
+    let j = 1;
+    let id = localStorage.getItem("prod_id");
+
+    for (let i = 0; i<arrSort.length; i++) {
+        if (id == arrSort[i]){
+            $carrito__.classList.add("disabled");
+            $carrito__.setAttribute("disabled", true);
+            $carrito__.value = "Producto ya agregado";
         }
-    })
-    .catch( err=>{
-        console.error(err);
-    })
+    }
 }
 
 /* Filtrar */ 
@@ -495,8 +477,8 @@ function cerrarSesion() {
 }
 
 function abrirPublicacion(id) { // open card 
-    localStorage.setItem("id_prod", id);
-    location.href = "./producto.html?prod_id=" + id;
+    localStorage.setItem("prod_id", id);
+    location.href = "./producto.php?prod_id=" + id;
 }
 
 function mostrarContrasenia(ojo) {

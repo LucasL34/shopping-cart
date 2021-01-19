@@ -66,20 +66,7 @@
         </form>
     </div>
     
-    <div id="carritoUI" class="display-none">
-        <h2> Carrito </h2>
-        
-        <p id="carrito_p"> Sin productos agregados:( </p>
-        <div id="carritoUI_section">
-            <span></span> <!-- invisible aux span -->
-            <span></span>
-        </div>
-        <hr>
-        <div id="mostrarTotal">
-            <input type="submit" id="comprar_todo" value="Comprar todo" onclick="comprarTodo_()">
-            <span id="precioTotal"></span>
-        </div>
-    </div>
+    <div id="carritoUI" class="display-none"></div>
 
     <section class="content" id="index">
         <div class="collection_div" id="toys">
@@ -95,7 +82,7 @@
             <div class="collection" id="business_prod"></div>
         </div>
         <a name="productos"></a>
-        <div id="productos"> </div>
+        <div id="productos"></div>
 
         <div id="designers">
             <h2> Top Designers </h2>

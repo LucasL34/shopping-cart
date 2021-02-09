@@ -105,21 +105,24 @@
             </div>
         </div>
     </footer>
-
+    
+    <script src="./assets/js/fetch_data.js"></script>
     <script src="./assets/js/main.js"></script>
+    <script src="./assets/js/cart.js"></script>
+    <script src="./assets/js/load_product.js"></script>
 </body>
 </html>
 <?php
 
-function session_on($name){ //with login
-    echo '<img src="./assets/img/store.svg" alt="Icono de carrito" id="carrito" onclick="MostrarCarrito()">';
-    echo '<span id="username_p">!Hola, <b>'.$name.'</b>!</span>';
-    echo '<span class="icon-download3" onclick="cerrarSesion()">';
-}
+    function session_on($name){ //with login
+        echo '<img src="./assets/img/store.svg" alt="Icono de carrito" id="carrito" onclick="MostrarCarrito()">';
+        echo '<span id="username_p">!Hola, <b>'.$name.'</b>!</span>';
+        echo '<span class="icon-download3" onclick="cerrarSesion()">';
+    }
 
-function session_off(){ //without login
-    echo '<a class="navLink" href="./register.php"> Registrarse </a>';
-    echo '<a class="navLink" href="./login.php"> Iniciar sesión </a>';
-}
+    function session_off(){ //without login
+        echo '<a class="navLink" href="./register.php"> Registrarse </a>';
+        echo '<a class="navLink" href="./login.php"> Iniciar sesión </a>';
+    }
 
 ?>

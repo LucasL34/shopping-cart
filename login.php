@@ -73,8 +73,9 @@
             <span class="icon-twitter"></span>
         </div>
     </footer>
+
+    <script src="./assets/js/password.js"></script>
     <script src="./assets/js/main.js"></script>
-    <script src="./assets/js/AccountMannager.js"></script>
     <?php if (isset($_POST['submit_l'])) {
             if ( isset($_POST['username_l']) && isset($_POST['pass_l']) ) {
 

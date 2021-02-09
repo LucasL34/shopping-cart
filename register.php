@@ -78,52 +78,52 @@
         </div>
     </footer>
 
-<script src="./assets/js/main.js"></script>
-<script src="./assets/js/AccountMannager.js"></script>
-<?php 
-if (isset($_POST['submit_r'])) {
-    if(
-        isset($_POST['name_r']) && isset($_POST['username_r']) &&
-        isset($_POST['pass_r']) && isset($_POST['pass2_r'])
-    ){
+    <script src="./assets/js/password.js"></script>
+    <script src="./assets/js/main.js"></script>
+    <?php 
+    if (isset($_POST['submit_r'])) {
+        if(
+            isset($_POST['name_r']) && isset($_POST['username_r']) &&
+            isset($_POST['pass_r']) && isset($_POST['pass2_r'])
+        ){
 
-        $name = $_POST['name_r'];
-        $username = $_POST['username_r'];
-        $pass = $_POST['pass_r'];
-        $pass_confirm = $_POST['pass2_r'];
+            $name = $_POST['name_r'];
+            $username = $_POST['username_r'];
+            $pass = $_POST['pass_r'];
+            $pass_confirm = $_POST['pass2_r'];
 
-        if($pass == $pass_confirm){
+            if($pass == $pass_confirm){
 
-            $verificado = 0;
-            $pass = md5($pass); // scripting pass 
+                $verificado = 0;
+                $pass = md5($pass); // scripting pass 
 
-            $sql = "INSERT INTO usuario (user_nombre, user_username, user_pass, prods_carrito) VALUES ('$name', '$username', '$pass', 0)";
-            
-                $select = "SELECT * FROM usuario WHERE user_username = '$username'";
+                $sql = "INSERT INTO usuario (user_nombre, user_username, user_pass, prods_carrito) VALUES ('$name', '$username', '$pass', 0)";
+                
+                    $select = "SELECT * FROM usuario WHERE user_username = '$username'";
 
-                if ( $registro = $mysqli->query($select) ) {
-                    if ( $registro->num_rows > 0 ) {
-                        $verificado = 1; //username existing 
+                    if ( $registro = $mysqli->query($select) ) {
+                        if ( $registro->num_rows > 0 ) {
+                            $verificado = 1; //username existing 
+                        }
                     }
+
+                if ($verificado == 1) {
+                    echo '<script> error(2); </script>'; // invalid username 
                 }
 
-            if ($verificado == 1) {
-                echo '<script> error(2); </script>'; // invalid username 
-            }
+                if( $verificado == 0 && $mysqli->query($sql) == true ){
 
-            if( $verificado == 0 && $mysqli->query($sql) == true ){
+                    $_SESSION['login'] = true;
+                    $_SESSION['username'] = $username;
 
-                $_SESSION['login'] = true;
-                $_SESSION['username'] = $username;
-
+                }
+            }else{
+                echo '<script> error(0); </script>'; // password 
             }
         }else{
-            echo '<script> error(0); </script>'; // password 
+            echo '<script> console.log("Comprobar form"); </script>';
         }
-    }else{
-        echo '<script> console.log("Comprobar form"); </script>';
     }
-}
-?>
+    ?>
 </body>
 </html>

@@ -128,7 +128,11 @@
             
         </div>
     </footer>
+
+    <script src="./assets/js/fetch_data.js"></script>
     <script src="./assets/js/main.js"></script>
+    <script src="./assets/js/cart.js"></script>
+    <script src="./assets/js/save_filter.js"></script>
 </body>
 </html>
 <?php

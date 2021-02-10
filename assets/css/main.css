@@ -160,12 +160,13 @@ input[type="submit"]{
     color: #fff;
     box-shadow: 3px 3px rgba(0, 0, 0, 0.4);
     margin-left: 1em;
-    transition: 500ms;
+    transition: 350ms;
 }
 input[type="submit"]:hover{
     background-color: #00a96a;
-    box-shadow: 3px 3px rgba( 255, 255, 255, 0.2);
+    box-shadow: 3px 3px rgba( 255, 255, 255, 0.5);
     color: #010006;
+    cursor: pointer;
 }
 
 .warning{
@@ -441,6 +442,13 @@ div#mostrarTotal{
     content: "$";
 }
 
+[data-cart="hidden"]{
+    display: none !important;
+}
+[data-cart="show"]{
+    display: flex !important;
+}
+
 /* PRODUCTO MAIN */
 div#producto_main{
     width: 100%;
@@ -460,6 +468,7 @@ div#blue, div#red{
     color: #010006;
 }
 p#prod_descr_{
+    color: rgba( 0, 0, 0, .75);
     padding: 0 1em;
 }
 div#prod_info_{
@@ -477,21 +486,32 @@ div#prod_button{
     justify-content: space-around;
     align-items: center;
 }
-input#prod_add_carrito{
-    background-color: #fed766;
-    color: #010006;
+input#prod-buy{
+    background-color: unset;
+    box-shadow: none;
+    font-size: 1.25em;
+    font-weight: bold;
 }
-input#prod_add_carrito:hover{
-    background-color: #ff595e;
+input#prod-buy:hover{
+    color: #00a96a;
 }
-input#prod_add_carrito-comprado_{
-    background-color: #c4c4c4;
+input#prod-cart_add:hover{
+    background-color: #00a96a;
+}
+
+input[data-buy="no_buy"]{
+    color: #00502b;
+}
+input[data-buy="buy"]{
     color: #000;
 }
-input#procesando_{
-    background-color: #fed766;
-    color: #010006;
+input[data-buy="process"]{
+    color: #1982c4;
 }
+input[data-buy="error"]{
+    color: #fe4a49;
+}
+
 span#prod_stock:not(.stocknt)::before{
     content: "Stock: x";
     font-weight: bold;
@@ -501,8 +521,12 @@ span.stocknt{
     font-weight: bold;
 }
 input.disabled{
+    color: rgba( 0, 0, 0, .50);
     background-color: #c4c4c4 !important;
     box-shadow: none;
+}
+input.disabled:hover{
+    color: rgba( 0, 0, 0, .50);
 }
 span#prod_precio_::before{
     content: "Precio: $";

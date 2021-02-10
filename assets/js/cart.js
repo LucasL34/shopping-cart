@@ -3,15 +3,17 @@
 async function MostrarCarrito(){ // abre el carritoUI w/ html
 
     var id = localStorage.getItem("user_id");
-
     var url = api_user + "?q=true&byid="+ id;
+    var cart_attr = $cart_UI.getAttribute("data-cart");
 
-    //$cart.innerHTML = ""; // empty div 
-    //innerCarrito($cart); // insert cart 
+    // switch mode
+    if(cart_attr == "hidden"){
+        $cart_UI.dataset.cart = "show";
+    }else{
+        $cart_UI.dataset.cart = "hidden";
+    }
 
-    $cart_UI.classList.toggle("display-none"); // show div
-
-    if($cart_UI.className != "display-none") {
+    if(cart_attr == "show") {
 
         try {
             let $cartSection = document.querySelector("#carritoUI_section"); // cart's post container 

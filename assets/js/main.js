@@ -6,8 +6,8 @@ var api_user = "./assets/funciones/obtener_usuarios.php";
 
 var $cart_UI = document.querySelector("#carritoUI"); // cart body
 
-var $comprar = document.querySelector("#prod_comprar");
-var $addCarrito = document.querySelector("#prod_add_carrito");
+var $comprar = document.querySelector("#prod-buy");
+var $addCarrito = document.querySelector("#prod-cart_add");
 
 if ( document.querySelector("#index") ){ // in main page
 
@@ -157,9 +157,10 @@ async function randomDesigners(){
 async function buy(id) {
     url = api_user + "?q=true&byid="+id;
     let response = await fetchData(url);
-
-    var $comprar = document.querySelector("#prod_comprar");
-    $comprar.id += " procesando_";
+    
+    var $comprar = document.querySelector("#prod-buy");
+    //$comprar.id += " procesando_";
+    $comprar.dataset.buy = "process";
     $comprar.value = "Procesando...";
 
     var datos = response[0];
@@ -176,12 +177,19 @@ async function buy(id) {
     };
 
     try{
+
         let response = await putData(api_prod, obj);
-        $comprar.value = "Comprar";
-        $comprar.id = "prod_comprar";
-        cargarProducto();
+
+        setTimeout( function(){
+            $comprar.value = "Comprado";
+            $comprar.dataset.buy = "buy";
+            cargarProducto();
+        }, 1500);
+        
+        //$comprar.id = "prod_comprar";
     }catch (err) {
         console.error(err);
+        $comprar.dataset.buy = "error";
         $comprar.value = "Error";
     }
 }
@@ -232,10 +240,10 @@ async function verificarCarrito(){
     blockButton( data[0].prods_carrito );
 
     if(!id && document.querySelector("#producto_main") ){
-        let $carrito__ = document.querySelector("#prod_add_carrito");
+        let $carrito__ = document.querySelector("#prod-cart_add");
         $carrito__.classList.add("disabled");
         $carrito__.setAttribute("disabled", true);
-        let $comprar__ = document.querySelector("#prod_comprar");
+        let $comprar__ = document.querySelector("#prod-buy");
         $comprar__.setAttribute("disabled", true);
         $comprar__.classList.add("disabled")
     }
@@ -243,7 +251,7 @@ async function verificarCarrito(){
 
 function blockButton(userProds){
     let id = localStorage.getItem("prod_id");
-    let $cart__ = document.querySelector("#prod_add_carrito");
+    let $cart__ = document.querySelector("#prod-cart_add");
 
     let arr = userProds.split(",");
     let arrSort = arr.sort(function(a, b){ return a-b; });
@@ -316,10 +324,16 @@ function cerrarSesion() {
     localStorage.removeItem("user_id");
 
     if ( document.querySelector("#producto_main") ){  // when logout disabled buy & car buttons 
-        document.querySelector("#prod_add_carrito").setAttribute("disabled", true);
-        document.querySelector("#prod_add_carrito").classList.add("disabled")
-        document.querySelector("#prod_comprar").setAttribute("disabled", true);
-        document.querySelector("#prod_comprar").classList.add("disabled")
+        let $cart_add = document.querySelector("#prod-cart_add");
+        let $cart_buy = document.querySelector("#prod-buy");
+
+        // disabled buttons 
+        $cart_add.setAttribute("disabled", true);
+        $cart_add.classList.add("disabled")
+        
+        $cart_buy.setAttribute("disabled", true);
+        $cart_buy.classList.add("disabled")
+
     }
 
     location.href = "./assets/funciones/logout.php"; 

@@ -3,6 +3,11 @@
     if(!isset($_GET['prod_id'])){
         echo '<script> location.href = "./index.php"; </script>';
     }
+    // set prod_id when into page 
+    echo "<script>
+            localStorage.setItem('prod_id', ".$_GET['prod_id']."); 
+        </script>";
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -32,6 +37,7 @@
     
     <link rel="stylesheet" href="./assets/css/main.css">
     <link rel="stylesheet" href="./assets/css/font.css">
+    
 </head>
 <body>
     <nav class="nav">
@@ -47,7 +53,7 @@
         ?></div>
     </nav>
 
-    <div id="carritoUI" class="display-none"></div>
+    <div id="carritoUI" data-cart="hidden"></div>
 
     <div id="producto_main">
         <div id="blue">
@@ -64,8 +70,8 @@
             </div>
             <hr class="separador">
             <div id="prod_button">
-                <input type="submit" class="button" id="prod_comprar" value="Comprar" onclick="buy(<?php echo $_GET['prod_id'] ?>)">
-                <input type="submit" class="button" id="prod_add_carrito" value="Añadir al carrito" onclick="addCarrito(<?php echo $_GET['prod_id'] ?>, '<?php echo $_SESSION['username'] ?>')">
+                <input type="submit" class="button" id="prod-buy" data-buy="no_buy" value="Comprar" onclick="buy(<?php echo $_GET['prod_id'] ?>)">
+                <input type="submit" class="button" id="prod-cart_add" data-add="no_add" value="Añadir al carrito" onclick="addCarrito(<?php echo $_GET['prod_id'] ?>, '<?php echo $_SESSION['username'] ?>')">
             </div>
         </div>
     </div>
@@ -105,7 +111,7 @@
             </div>
         </div>
     </footer>
-    
+
     <script src="./assets/js/fetch_data.js"></script>
     <script src="./assets/js/main.js"></script>
     <script src="./assets/js/cart.js"></script>

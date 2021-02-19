@@ -31,8 +31,8 @@
     <a name="top"></a>
     
     <nav class="nav">
-        <a href="#top" id="logoVinculo">
-            <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo" id="logoShop">
+        <a href="#top" id="logo_vinculo">
+            <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo" id="logo_shop">
         </a>
         <div class="control" id="control_index"><?php
             if(isset($_SESSION['login'])){
@@ -43,7 +43,7 @@
         ?></div>
     </nav>
 
-    <div id="filtrarDiv">
+    <div id="filtrar_div">
         <form action="./filtrar.php" method="POST" id="form_s">
             <select id="calificacion" class="select" name="review_f">
                 <option value="99" disabled selected hidden> Calificación </option>
@@ -62,11 +62,11 @@
                     <option value="100000"> Menos de $100.000 </option>
             </select>
 
-            <input type="submit" name="filtrar" value="Filtrar" id="filtrarButton">
+            <input type="submit" name="filtrar" value="Filtrar" id="filtrar_button">
         </form>
     </div>
     
-    <div id="carritoUI" class="display-none"></div>
+    <div id="carrito_ui" data-cart="hidden"></div>
 
     <section class="content" id="index">
         <div class="collection_div" id="toys">
@@ -91,11 +91,11 @@
         </div>
     </section>
 
-    <footer class="footer" id="footerShop">
+    <footer class="footer" id="footer_shop">
         <div class="footerSection" id="nosotros">
             <a href="#top"> Toru Store</a>
             <hr class="separador">
-            <img src="./assets/img/store.svg" alt="Logo Toru" id="footerLogo">
+            <img src="./assets/img/store.svg" alt="Logo Toru" id="footer_logo">
         </div>
 
         <div class="footerSection" id="inicio">
@@ -119,7 +119,7 @@
         
             <i> Términos y condiciones </i>
         
-            <div id="footerRedes">
+            <div id="footer_redes">
                 <span class="icon-facebook"></span>
                 <span class="icon-pinterest"></span>
                 <span class="icon-instagram"></span>

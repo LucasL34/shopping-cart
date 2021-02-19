@@ -32,8 +32,8 @@
 <body>
     <div class="content" id="register"></div>
     <nav class="nav">
-        <a href="./index.php" id="logoVinculo">
-            <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo" id="logoShop">
+        <a href="./index.php" id="logo_vinculo">
+            <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo" id="logo_shop">
         </a>
         <a class="navLink" href="./login.php"> Entrar </a>
     </nav>
@@ -45,7 +45,7 @@
         <fieldset class="fieldset" id="fieldset_r">
                 <label for="name_r"> Nombre completo: </label>
             <div class="inputContainer">
-                <input type="text" class="inputs" id="nombreCompleto" name="name_r">
+                <input type="text" class="inputs" id="nombre_completo" name="name_r">
             </div>
                 <label for="username_r"> Nombre de usuario: <span class="color-red">*</span> </label>
             <div class="inputContainer">
@@ -70,7 +70,7 @@
 
     <footer class="footer footerSesion">
         <i> toru 2020 </i>
-        <div id="footerRedes">
+        <div id="footer_redes">
             <span class="icon-facebook"></span>
             <span class="icon-pinterest"></span>
             <span class="icon-instagram"></span>

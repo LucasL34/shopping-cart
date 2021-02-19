@@ -29,8 +29,8 @@
 </head>
 <body>
     <nav class="nav" id="filtrar_main">
-        <a href="./index.php#top" id="logoVinculo">
-            <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo" id="logoShop">
+        <a href="./index.php#top" id="logo_vinculo">
+            <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo" id="logo_shop">
         </a>
         <div class="control"><?php
             if(isset($_SESSION['login'])){
@@ -41,19 +41,19 @@
         ?></div>
     </nav>
 
-    <div id="carritoUI" class="display-none">
+    <div id="carrito_ui" data-cart="hidden">
         <h2> Carrito </h2>
         <hr>
-        <div id="carritoUI_section">
+        <div id="carrito_ui_section">
         </div>
         <hr>
-        <div id="mostrarTotal">
+        <div id="mostrar_total">
             <input type="submit" id="comprar_todo" value="Comprar todo" onclick="comprarTodo_()">
-            <span id="precioTotal"></span>
+            <span id="precio_total"></span>
         </div>
     </div>
     
-    <div id="filtrarDiv">
+    <div id="filtrar_div">
         <form action="./filtrar.html" method="POST" id="form_s">
             <select id="calificacion" class="select" name="review_f">
                 <option value="99" disabled selected hidden> Calificación </option>
@@ -72,7 +72,7 @@
                 <option value="100000"> Menos de $100.000 </option>
             </select>
 
-            <input type="submit" name="filtrar" value="Filtrar" id="filtrarButton">
+            <input type="submit" name="filtrar" value="Filtrar" id="filtrar_button">
         </form>
     </div>
     
@@ -86,11 +86,11 @@
         </div>
     </select>
 
-    <footer class="footer" id="footerShop">
+    <footer class="footer" id="footer_shop">
         <div class="footerSection" id="nosotros">
             <a href="#top"> Toru Store</a>
             <hr class="separador">
-            <img src="./assets/img/store.svg" alt="Logo Toru" id="footerLogo">
+            <img src="./assets/img/store.svg" alt="Logo Toru" id="footer_logo">
         </div>
 
         <div class="footerSection" id="inicio">
@@ -112,7 +112,7 @@
         <div class="creditos">
             <i> toru 2020 </i>
             <i> Términos y condiciones </i>
-            <div id="footerRedes">
+            <div id="footer_redes">
                 <span class="icon-facebook"></span>
                 <span class="icon-pinterest"></span>
                 <span class="icon-instagram"></span>

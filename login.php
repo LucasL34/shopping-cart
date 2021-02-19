@@ -33,8 +33,8 @@
 <body>
     <div class="content" id="login"></div>
         <nav class="nav">
-            <a href="./index.php" id="logoVinculo">
-                <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo" id="logoShop">
+            <a href="./index.php" id="logo_vinculo">
+                <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo" id="logo_shop">
             </a>
             <a class="navLink" href="./register.php"> Unirse </a>
         </nav>
@@ -66,7 +66,7 @@
     
     <footer class="footer footerSesion">
         <i> toru 2020 </i>
-        <div id="footerRedes">
+        <div id="footer_redes">
             <span class="icon-facebook"></span>
             <span class="icon-pinterest"></span>
             <span class="icon-instagram"></span>

@@ -5,7 +5,7 @@
     }
     // set prod_id when into page 
     echo "<script>
-            localStorage.setItem('prod_id', ".$_GET['prod_id']."); 
+            localStorage.setItem('prod_id', ".$_GET['prod_id'].");
         </script>";
 
 ?>
@@ -41,8 +41,8 @@
 </head>
 <body>
     <nav class="nav">
-        <a href="./index.php#top" id="logoVinculo">
-            <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo" id="logoShop">
+        <a href="./index.php#top" id="logo_vinculo">
+            <img src="./assets/img/logo.png" alt="Logo de Toru" class="logo" id="logo_shop">
         </a>
         <div class="control"><?php
             if(isset($_SESSION['login'])){
@@ -53,34 +53,39 @@
         ?></div>
     </nav>
 
-    <div id="carritoUI" data-cart="hidden"></div>
+    <div id="carrito_ui" data-cart="hidden"></div>
 
     <div id="producto_main">
-        <div id="blue">
-            <img id="prod_img_">
-        </div>
-        <div id="red">
-            <h2 id="prod_titulo"></h2>
+
+        <div id="data_container">
+            <div id="prod_main_data">
+                <h2 id="prod_titulo"></h2>
+                <span id="prod_precio_"></span>
+                <span id="prod_empresa_"></span>
+            </div>
             <p id="prod_descr_"></p>
             <div id="prod_info_">
-                <span id="prod_review_"></span>
-                <span id="prod_empresa_"></span>
-                <span id="prod_stock"></span>
-                <span id="prod_precio_"></span>
+                <span class="dataInfo_" id="prod_review_"></span>
+                <span class="dataInfo_" id="prod_stock" data-stock="stock"></span>
             </div>
             <hr class="separador">
             <div id="prod_button">
                 <input type="submit" class="button" id="prod-buy" data-buy="no_buy" value="Comprar" onclick="buy(<?php echo $_GET['prod_id'] ?>)">
-                <input type="submit" class="button" id="prod-cart_add" data-add="no_add" value="Añadir al carrito" onclick="addCarrito(<?php echo $_GET['prod_id'] ?>, '<?php echo $_SESSION['username'] ?>')">
+                <input type="submit" class="button" id="prod-cart_add" data-add="no_add" value="Añadir al carrito" >
             </div>
         </div>
+
+        <div id="img_container">
+            <img id="prod_img_">
+        </div>
+
     </div>
 
-    <footer class="footer" id="footerShop">
+    <footer class="footer" id="footer_shop">
         <div class="footerSection" id="nosotros">
             <a href="#top"> Toru Store</a>
             <hr class="separador">
-            <img src="./assets/img/store.svg" alt="Logo Toru" id="footerLogo">
+            <img src="./assets/img/store.svg" alt="Logo Toru" id="footer_logo">
         </div>
 
         <div class="footerSection" id="inicio">
@@ -103,7 +108,7 @@
             <i> toru 2020 </i>
             <i> Términos y condiciones </i>
         
-            <div id="footerRedes">
+            <div id="footer_redes">
                 <span class="icon-facebook"></span>
                 <span class="icon-pinterest"></span>
                 <span class="icon-instagram"></span>

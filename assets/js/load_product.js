@@ -34,11 +34,10 @@ async function cargarProducto(){
             $stock.innerText = prod.prod_cant;
         }else{
 
-            $stock.classList.add("stocknt");
+            $stock.dataset.stock = "no-stock";
             $stock.innerHTML = 'SIN STOCK';
 
-            $comprar.setAttribute("disabled", true);
-            $comprar.classList.add("disabled");
+            $comprar.disabled = true;
             //$comprar.dataset.buy = "disabled";
         }
 

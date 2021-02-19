@@ -136,9 +136,12 @@ if($_SERVER['REQUEST_METHOD'] == "PUT"){
 
         if($mysqli->query($update) === TRUE){
                 $respuesta = [
-                    "status" => 201, "response"=> [ "id" => $parametros['user_id'], 
-                    "nombre: " => $parametros['user_nombre'], "username"=>$parametros['user_username'], 
-                    "Carrito: " => $parametros['user_carrito'], "contraseña: " => $parametros['user_pass'],
+                    "status" => 201, "response"=> [ 
+                        "id" => $parametros['user_id'],
+                        "name" => $parametros['user_nombre'],
+                        "username"=>$parametros['user_username'],
+                        "cart" => $parametros['user_carrito'],
+                        "pass" => $parametros['user_pass'],
                     ]
                 ];
 

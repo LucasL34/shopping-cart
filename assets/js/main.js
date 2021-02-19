@@ -4,10 +4,11 @@ var monto = 0;
 var api_prod = "./assets/funciones/obtener_productos.php";
 var api_user = "./assets/funciones/obtener_usuarios.php";
 
-var $cart_UI = document.querySelector("#carritoUI"); // cart body
+var $cart_UI = document.querySelector("#carrito_ui"); // cart body
 
 var $comprar = document.querySelector("#prod-buy");
 var $addCarrito = document.querySelector("#prod-cart_add");
+var $content = document.querySelector(".content");
 
 if ( document.querySelector("#index") ){ // in main page
 
@@ -42,6 +43,10 @@ if( document.querySelector("#filtrar_main") ){ // filter page
 
 // web functions
 
+function innerElement( $elemento, $destino ){ 
+    $destino.innerHTML += $elemento;
+}
+
 async function fetchingData(){ // insert in web
     var url = api_prod + "/?q=true&prod_f=others"; // filter all products - business & toys
     var $productos = document.querySelector("#productos");
@@ -55,8 +60,47 @@ async function fetchingData(){ // insert in web
     toys();
 }
 
-function innerElement( $elemento, $destino ){ 
-    $destino.innerHTML += $elemento;
+$content.addEventListener("click", e => {
+
+    var $post = e.target.parentElement;
+    let postClass = $post.classList.value; // className value
+    
+    // change $post in different cases 
+    if (postClass === "productoInfo" ) {
+        $post = $post.parentElement;
+    }else if(postClass === "prodInfoSection" ) {
+        $post = $post.parentElement.parentElement;
+    }
+
+    let id = $post.getAttribute("data-id"); //get id from post
+
+    if( id ){
+
+        localStorage.setItem("prod_id", id); // save id 
+        location.href = "./product.php?prod_id=" + id;
+
+    }else{
+        // no post click
+        return null;
+    }
+    
+});
+
+function cardFactory(data){
+    let Card = `<article class="post" data-id="${data.prod_id}" >
+                <img src="./assets/img/productos/${data.prod_image}" class="prodPhoto" alt="${data.prod_nombre}">
+                <div class="prodInfo">
+                    <h4 class="prodNombre"> ${data.prod_nombre} </h4>
+                    <hr class="separador">
+                    <div class="prodInfoSection">
+                        ${categoria(data.prod_review)}
+                        <span> - </span>
+                        <span class="precio">${data.prod_precio}</span>
+                    </div>
+                </div>
+            </article>`;
+
+    return Card;
 }
 
 async function business(){
@@ -90,40 +134,6 @@ async function toys(){
     innerElement(toys, $toys);
 }
 
-function cardFactory(data){
-    let Card = `<article class="post" onclick="abrirPublicacion(${data.prod_id})">
-                <img src="./assets/img/productos/${data.prod_image}" class="producto_foto" alt="${data.prod_nombre}">
-                <div class="producto_info">
-                    <h4 class="producto_nombre"> ${data.prod_nombre} </h4>
-                    <hr class="separador">
-                    <div class="producto_info_section">
-                        ${categoria(data.prod_review)}
-                        <span> - </span>
-                        <span class="precio">${data.prod_precio}</span>
-                    </div>
-                </div>
-            </article>`;
-
-    return Card;
-}
-
-function innerCart($cart){
-
-    let $cartElement = `
-        <h2> Carrito </h2>
-
-            <p id="carrito_p"> Sin productos agregados:( </p>
-            <div id="carritoUI_section"></div>
-            <hr>
-            <div id="mostrarTotal">
-                <input type="submit" id="comprar_todo" value="Comprar todo" onclick="buyCarrito()">
-                <span id="precioTotal"></span>
-            </div>
-    `;
-    
-    innerElement($cartElement, $cart);
-}
-
 async function randomDesigners(){
     var designer = "";
     let array = [];
@@ -144,10 +154,10 @@ async function randomDesigners(){
 
     for (let i in data) {
         designer += `
-            <div class="designers_post">
+            <div class="designersPost">
                 <img src="./assets/img/designers/${data[i].des_id}.png" alt="Imagen de ${data[i].des_name}">
-                <h2 class="designers_name"> ${data[i].des_name} </h2>
-                <small class="designers_username"> @${data[i].des_username} </small>
+                <h2 class="designersName"> ${data[i].des_name} </h2>
+                <small class="designersUsername"> @${data[i].des_username} </small>
             </div>`;
     }
 
@@ -194,40 +204,10 @@ async function buy(id) {
     }
 }
 
-async function listProds(carrito) {
-    
-    var data = await fetchData(api_prod);
-    
-    var j = 1;
-    var arr = carrito.split(",");
-    var arrayProds = arr.sort(function (a, b) { return a - b; });
-    const $carritoDiv = document.querySelector("#carritoUI_section");
-    var productosCar = "";
-
-    for (let i in data) {
-        if ( data[i].prod_id == arrayProds[j] ){
-            productosCar += `
-                <div class="carrito_div_">
-                    <img src="./assets/img/productos/${data[i].prod_image}" alt="${data[i].prod_nombre}" class="carrito_img_">
-                    <div class="carrito_div_section">
-                        <h5> ${recortarTitle(data[i].prod_nombre)} </h5> 
-                        <span class="prod_review_carrito"> ${categoria(data[i].prod_review)} </span>
-                        <span class="prod_precio_carrito"> ${data[i].prod_precio} </span>
-                        <span class="icon-cross"></span>
-                    </div>
-                </div>`;
-            setMonto(Number(data[i].prod_precio));
-            colocarProducto(productosCar);
-            j++;
-        }
-    }
-    
-}
-
 function colocarProducto(data){
-    const $carritoDiv = document.querySelector("#carritoUI_section");
+    const $carritoDiv = document.querySelector("#carrito_ui_section");
 
-    document.querySelector("#precioTotal").innerText = getMonto();
+    document.querySelector("#precio_total").innerText = getMonto();
     $carritoDiv.innerHTML = data;   
 }
 
@@ -241,11 +221,9 @@ async function verificarCarrito(){
 
     if(!id && document.querySelector("#producto_main") ){
         let $carrito__ = document.querySelector("#prod-cart_add");
-        $carrito__.classList.add("disabled");
-        $carrito__.setAttribute("disabled", true);
+        $carrito__.disabled = true;
         let $comprar__ = document.querySelector("#prod-buy");
-        $comprar__.setAttribute("disabled", true);
-        $comprar__.classList.add("disabled")
+        $comprar__.disabled = true;
     }
 }
 
@@ -254,12 +232,12 @@ function blockButton(userProds){
     let $cart__ = document.querySelector("#prod-cart_add");
 
     let arr = userProds.split(",");
-    let arrSort = arr.sort(function(a, b){ return a-b; });
+    
+    let arrSort = sortVector(arr);
 
     for (let i = 0; i<arrSort.length; i++) {
         if (id == arrSort[i]){
-            $cart__.classList.add("disabled");
-            $cart__.setAttribute("disabled", true);
+            $cart__.disabled = true;
             $cart__.value = "Producto ya agregado";
         }
     }
@@ -319,6 +297,13 @@ async function cargarFiltro(){
 
 /* Basics functions */ 
 
+function sortVector(arr){
+    
+    let arrSort = arr.sort(function(a, b){ return a-b; });
+
+    return arrSort;
+}
+
 function cerrarSesion() {
 
     localStorage.removeItem("user_id");
@@ -337,11 +322,6 @@ function cerrarSesion() {
     }
 
     location.href = "./assets/funciones/logout.php"; 
-}
-
-function abrirPublicacion(id) { // open card 
-    localStorage.setItem("prod_id", id);
-    location.href = "./producto.php?prod_id=" + id;
 }
 
 function recortarTitle(string) { 
@@ -402,5 +382,9 @@ function error(nro){
 
 }
 
-function setMonto(value) { monto += value; }
-function getMonto() { return Math.round(monto * 100) / 100; }
+function setMonto(value) {
+    value = Number(value);
+    monto += value; 
+
+} 
+function getMonto() { return Math.round(monto * 100) / 100; } // round 
